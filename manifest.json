@@ -1,5 +1,5 @@
 {
-  "name": "NOREXA AI Health",
+  "name": "POWERED BY DEKA",
   "short_name": "AFYA AI",
   "start_url": ".",
   "display": "standalone",
@@ -9,7 +9,7 @@
   "icons": [
     {
       "src": "https://i.imgur.com/XS6cybL.jpeg",
-      "sizes": "512x512",
+      "sizes": "612x612",
       "type": "image/png"
     }
   ]
