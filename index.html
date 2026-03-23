@@ -16,10 +16,15 @@ html, body{
   overflow:hidden;
 }
 
-/* VIDEO */
 #videoBG{
-  position:fixed; top:0; left:0; width:100%; height:100%;
-  object-fit:cover; opacity:.25; z-index:0;
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  opacity:1; /* FULL visible */
+  z-index:0;
 }
 
 /* CLOCK */
@@ -136,6 +141,16 @@ html, body{
   <img id="adImage" src="https://i.imgur.com/ZL4l5Gj.jpeg">
 </div>
 
+<!-- CONTROLS -->
+<div id="controls">
+  <button class="ctrl" onclick="prevSlide()">⏮</button>
+
+  <!-- ANNOUNCEMENT -->
+  <button id="soundBtn">announce</button>
+
+  <button class="ctrl" onclick="nextSlide()">⏭</button>
+</div>
+
 <!-- CHAT GPT -->
 <div id="chatBox">
   <button onclick="openChatGPT()"
@@ -225,6 +240,32 @@ setInterval(()=>{
   a=(a+1)%ads.length;
 },30000);
 
+/* ANNOUNCEMENTS */
+const announce=[
+"Kesho yako inaanza na afya njema",
+"Chanjo zinapatikana leo",
+"Kliniki iko wazi kila siku ya kazi"
+];
+
+let aIndex=0;
+let voiceOn=true;
+
+const btn=document.getElementById("soundBtn");
+
+btn.onclick=function(){
+  voiceOn=!voiceOn;
+  btn.innerText=voiceOn?"Pause Voice":"Play Voice";
+  if(!voiceOn) speechSynthesis.cancel();
+};
+
+setInterval(()=>{
+  if(voiceOn && !speechSynthesis.speaking){
+    const msg=new SpeechSynthesisUtterance(announce[aIndex]);
+    msg.lang="sw-TZ";
+    speechSynthesis.speak(msg);
+    aIndex=(aIndex+1)%announce.length;
+  }
+},40000);
 
 /* CHATGPT */
 function openChatGPT(){
