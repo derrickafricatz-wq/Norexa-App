@@ -1,8 +1,8 @@
-
+<!DOCTYPE html> 
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>NOREXA AI HEALTH DEMO</title>
+<title>Health Education</title>
 
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#00ffff">
@@ -10,282 +10,488 @@
 <link href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap" rel="stylesheet">
 
 <style>
-html, body{
+html,body{
   margin:0; padding:0; height:100%; width:100%;
-  background:black; color:white; font-family:Arial;
+  background:black; color:white;
+  font-family:Arial, Helvetica, sans-serif;
   overflow:hidden;
 }
 
-#videoBG{
+/* VIDEO */
+#brandVideo{
   position:fixed;
-  top:0;
-  left:0;
+  inset:0;
   width:100%;
   height:100%;
   object-fit:cover;
-  opacity:1; /* FULL visible */
   z-index:0;
-}
-
-/* CLOCK */
-#clock{
-  position:fixed; top:10px; left:20px; font-size:32px;
-  background:rgba(0,0,0,.6); padding:10px 18px; border-radius:10px; z-index:9;
-}
-
-/* WEATHER */
-#weather{
-  position:fixed; top:10px; right:20px;
-  background:rgba(0,0,0,.6);
-  padding:10px 18px; border-radius:10px;
-  font-size:16px; line-height:1.5; z-index:9;
 }
 
 /* LOGO */
 #logoTicker{
-  position:fixed; top:0; left:0; width:100%; height:150px; overflow:hidden; z-index:10;
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:300px;
+  overflow:hidden;
+  z-index:10;
+  pointer-events:none;
 }
 #logoTickerInner{
-  display:flex; white-space:nowrap; animation:scrollLogo 25s linear infinite;
+  display:flex;
+  white-space:nowrap;
+  animation:scrollLogo 25s linear infinite;
 }
-#logoTickerInner img{ height:200px; margin-right:50px; }
+#logoTickerInner img{
+  height:290px;
+  margin-right:120px;
+  opacity:0.9;
+}
 @keyframes scrollLogo{
   0%{transform:translateX(100%);}
   100%{transform:translateX(-100%);}
 }
 
-/* ADS */
-#adBox{
-  position:fixed; right:-50%; top:0; width:50%; height:100%;
-  transition:right .6s; z-index:8;
+/* CLOCK */
+#clockBox{
+  position:fixed;
+  top:10px;
+  left:20px;
+  font-size:32px;
+  background:rgba(0,0,0,0.6);
+  padding:10px 18px;
+  border-radius:10px;
+  z-index:10;
 }
-#adBox img{ width:100%; height:100%; object-fit:cover; }
+
+/* WEATHER */
+#weatherBox{
+  position:fixed;
+  top:10px;
+  right:20px;
+  background:rgba(0,0,0,0.6);
+  padding:10px;
+  border-radius:18px;
+  z-index:10;
+  line-height:1.5;
+}
+
+/* ADS */
+#adImage{
+  position:fixed;
+  top:0;
+  right:-100%;
+  width:50%;
+  height:100%;
+  background:black;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:6;
+  transition:right .6s ease;
+}
+
+#adImg{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+/* LESSON FADE */
+.lessonFade{
+  opacity:0;
+  transition:opacity 0.8s ease-in-out;
+}
+
+/* SCROLL */
+#scrollBanner{
+  position:fixed;
+  bottom:0;
+  width:100%;
+  background:black;
+  z-index:10;
+  padding:8px 0;
+}
+#scrollText{
+  white-space:nowrap;
+  animation:scroll 30s linear infinite;
+  font-size:30px;
+}
+.dekaStyle{
+  font-family:'Russo One', sans-serif;
+  color:#00ffff;
+  font-size:38px;
+}
+@keyframes scroll{
+  from{transform:translateX(100%);}
+  to{transform:translateX(-100%);}
+}
+
+/* LESSON LABEL */
+#lessonLabel{
+  position:fixed;
+  top:70px;
+  left:20px;
+  background:rgba(0,0,0,0.6);
+  padding:10px 16px;
+  border-radius:14px;
+  font-size:16px;
+  color:#00ffff;
+  z-index:5;
+}
+
+/* BUTTONS */
+#toggleBtn, #keypadToggle{
+  position:fixed;
+  bottom:62px;
+  width:58px;
+  height:58px;
+  border-radius:50%;
+  background:linear-gradient(145deg,#00ffff,#00baba);
+  color:black;
+  border:none;
+  z-index:6;
+}
+#toggleBtn{ right:20px; }
+#keypadToggle{ left:20px; }
 
 /* CONTROLS */
 #controls{
-  position:fixed; bottom:80px; left:50%; transform:translateX(-50%);
-  display:flex; align-items:center;
-  background:rgba(0,0,0,.8);
-  padding:15px; border-radius:20px; z-index:10;
+  position:fixed;
+  bottom:90px;
+  right:20px;
+  width:220px;
+  background:rgba(0,0,0,0.78);
+  border-radius:22px;
+  z-index:5;
+  opacity:0;
+  pointer-events:none;
 }
-.ctrl{
-  width:55px; height:55px; border:none; border-radius:50%;
-  margin:6px; background:#00ffff; color:black; cursor:pointer;
+#controls.show{opacity:1; pointer-events:auto;}
+
+#controlGrid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  padding:14px;
 }
-#soundBtn{
-  width:140px; height:55px; border:none; border-radius:12px;
-  background:#00ffff; font-weight:bold; cursor:pointer;
+.ctrl-btn{
+  width:48px;
+  height:48px;
+  border-radius:50%;
+  border:none;
+  background:#00ffff;
 }
 
-/* VIDEO SOUND BUTTON */
-#videoMuteBtn{
+/* KEYPAD */
+#keypad{
   position:fixed;
-  bottom:160px;
-  left:20px;
-  z-index:999;
-  padding:12px 16px;
+  bottom:140px;
+  left:50%;
+  transform:translateX(-50%);
+  width:260px;
+  background:rgba(0,0,0,0.9);
+  border-radius:20px;
+  padding:12px;
+  z-index:20;
+  display:none;
+}
+
+#display{
+  width:100%;
+  padding:10px;
+  margin-bottom:10px;
+  border-radius:10px;
+  border:none;
+  text-align:center;
+  background:black;
+  color:#00ffff;
+}
+
+#keys{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+}
+#keys button{
+  height:55px;
   border:none;
   border-radius:12px;
   background:#00ffff;
   color:black;
-  font-weight:bold;
-  cursor:pointer;
-}
-
-/* CHAT BUTTON */
-#chatBox{
-  position:fixed; bottom:150px; right:20px; z-index:20;
-}
-
-/* BANNER */
-#bannerTicker{
-  position:fixed; bottom:0; width:100%; height:60px;
-  background:black; display:flex; align-items:center;
-  overflow:hidden;
-}
-#bannerTickerInner{
-  white-space:nowrap;
-  font-family:'Russo One';
-  font-size:36px;
-  color:#00ffff;
-  animation:scrollBanner 45s linear infinite;
-}
-@keyframes scrollBanner{
-  0%{transform:translateX(100%);}
-  100%{transform:translateX(-100%);}
 }
 </style>
 </head>
 
 <body>
 
-<!-- LOGO -->
+<video id="brandVideo" autoplay playsinline></video>
+
 <div id="logoTicker">
   <div id="logoTickerInner">
-    <img src="https://i.imgur.com/KZlMkqV.png">
     <img src="https://i.imgur.com/KZlMkqV.png">
     <img src="https://i.imgur.com/KZlMkqV.png">
   </div>
 </div>
 
-<div id="clock"></div>
-<div id="weather">Loading Weather...</div>
+<div id="clockBox"></div>
+<div id="weatherBox">Loading...</div>
 
-<video id="videoBG" autoplay muted playsinline></video>
+<div id="lessonLabel">ALL HEALTH LESSONS. By Deka</div>
 
-<!-- VIDEO SOUND BUTTON -->
-<button id="videoMuteBtn">🔇 voice in</button>
+<div id="adImage"><img id="adImg"></div>
 
-<!-- ADS -->
-<div id="adBox">
-  <img id="adImage" src="https://i.imgur.com/ZL4l5Gj.jpeg">
+<div id="scrollBanner">
+  <div id="scrollText">
+    <span class="dekaStyle">SHIRIKA LA AFYA DUNIANI</span> • Linda Afya Yako Leo •
+  </div>
 </div>
 
+<button id="toggleBtn">≡</button>
+<button id="keypadToggle">⌨</button>
 
-  <!-- ANNOUNCEMENT -->
-  <button id="soundBtn">announce</button>
-
-
-<!-- CHAT GPT -->
-<div id="chatBox">
-  <button onclick="openChatGPT()"
-    style="padding:12px 18px;border:none;border-radius:12px;
-    background:#00ffff;color:black;font-weight:bold;cursor:pointer;">
-    afya ai
-  </button>
+<div id="keypad">
+  <input id="display" type="number">
+  <div id="keys">
+    <button onclick="pressKey(1)">1</button>
+    <button onclick="pressKey(2)">2</button>
+    <button onclick="pressKey(3)">3</button>
+    <button onclick="pressKey(4)">4</button>
+    <button onclick="pressKey(5)">5</button>
+    <button onclick="pressKey(6)">6</button>
+    <button onclick="pressKey(7)">7</button>
+    <button onclick="pressKey(8)">8</button>
+    <button onclick="pressKey(9)">9</button>
+    <button onclick="clearInput()">C</button>
+    <button onclick="pressKey(0)">0</button>
+    <button onclick="submitLesson()">OK</button>
+    <button onclick="refreshLessons()">↻</button>
+  </div>
 </div>
 
-<!-- BANNER -->
-<div id="bannerTicker">
-  <div id="bannerTickerInner">
-    AFYA AI powered by deka: afya njema inaanza na wewe, tunza afya yako.
+<div id="controls">
+  <div id="controlGrid">
+    <button class="ctrl-btn" id="prev">⏮</button>
+    <button class="ctrl-btn" id="rew">⏪</button>
+    <button class="ctrl-btn" id="next">⏭</button>
+    <button class="ctrl-btn" id="playPause">⏯</button>
+    <button class="ctrl-btn" id="ff">⏩</button>
   </div>
 </div>
 
 <script>
 
+const video = document.getElementById("brandVideo");
+
+/* AUDIO UNLOCK */
+document.body.addEventListener("click",()=>{
+  video.muted = false;
+  video.volume = 1;
+  video.play().catch(()=>{});
+},{once:true});
+
 /* CLOCK */
-setInterval(()=>{
-  document.getElementById("clock").innerText =
-  new Date().toLocaleTimeString();
-},1000);
+setInterval(()=>clockBox.innerText=new Date().toLocaleTimeString(),1000);
 
-/* WEATHER (NAME ONLY) */
-const regions = ["Dar es Salaam","Dodoma","Arusha","Mwanza"];
-
-async function getCoords(name){
-  const res = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${name}&count=1`);
-  const data = await res.json();
-  if(!data.results) return null;
-  return data.results[0];
-}
-
+/* WEATHER */
+const cities=["Dar es Salaam","Dodoma","Arusha","Mwanza"];
 async function loadWeather(){
-  let html="<b>Weather Report</b><br>";
-
-  for(const r of regions){
-    try{
-      const loc = await getCoords(r);
-      if(!loc){
-        html += `${r}: not found<br>`;
-        continue;
-      }
-
-      const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${loc.latitude}&longitude=${loc.longitude}&current_weather=true`);
-      const data = await res.json();
-
-      html += `${r}: ${Math.round(data.current_weather.temperature)}°C<br>`;
-    }catch{
-      html += `${r}: error<br>`;
-    }
-  }
-
-  document.getElementById("weather").innerHTML = html;
+let html="<b>Weather TZ</b><br>";
+for(const city of cities){
+try{
+let geo=await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${city}`);
+let g=await geo.json();
+if(!g.results){html+=city+": --<br>";continue;}
+let {latitude,longitude}=g.results[0];
+let w=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true`);
+let d=await w.json();
+html+=city+": "+Math.round(d.current_weather.temperature)+"°C<br>";
+}catch{html+=city+": --<br>";}}
+weatherBox.innerHTML=html;
 }
 loadWeather();
 setInterval(loadWeather,600000);
 
-/* VIDEO */
-const vids=[
-"https://i.imgur.com/YOYyJ49.mp4",
-"https://i.imgur.com/nXmK9G4.mp4"
-];
-let v=0;
-const video=document.getElementById("videoBG");
-
-function playVideo(){
-  video.src=vids[v];
-  video.play().catch(()=>{});
-  v=(v+1)%vids.length;
-}
-video.addEventListener("ended",playVideo);
-playVideo();
-
 /* ADS */
-const ads=[
-"https://i.imgur.com/ZL4l5Gj.jpeg",
-"https://i.imgur.com/dLeE6dL.jpeg"
-];
-let a=0;
-
-setInterval(()=>{
-  document.getElementById("adImage").src=ads[a];
-  document.getElementById("adBox").style.right="0";
-  setTimeout(()=>document.getElementById("adBox").style.right="-50%",10000);
-  a=(a+1)%ads.length;
-},30000);
-
-/* ANNOUNCEMENTS */
-const announce=[
-"Kesho yako inaanza na afya njema",
-"Mwili imara, unaanza na mazoezi. mazoezi kwa afya bora",
-"Kliniki iko wazi kila siku ya kazi"
+const adImages=[
+"https://i.imgur.com/WE1WnYg.png",
+"https://i.imgur.com/76Uyeqc.png"
 ];
 
-let aIndex=0;
-let voiceOn=true;
+/* 🔥 PRELOAD (fix black issue fully) */
+adImages.forEach(src=>{
+  const img=new Image();
+  img.src=src;
+});
 
-const btn=document.getElementById("soundBtn");
+let adIndex=0;
+let adInterval;
+let currentLesson=null;
 
-btn.onclick=function(){
-  voiceOn=!voiceOn;
-  btn.innerText=voiceOn?"Pause Voice":"Play Voice";
-  if(!voiceOn) speechSynthesis.cancel();
+const lessonAds={
+1:["https://i.imgur.com/Z8G3263.jpeg","https://i.imgur.com/IHM79mK.png"],
+2:["https://i.imgur.com/YOYyJ49.jpeg"],
+3:["https://i.imgur.com/KZlMkqV.png"],
+4:["https://i.imgur.com/KZlMkqV.png","https://i.imgur.com/MPxIJO3.jpeg"]
 };
 
-setInterval(()=>{
-  if(voiceOn && !speechSynthesis.speaking){
-    const msg=new SpeechSynthesisUtterance(announce[aIndex]);
-    msg.lang="sw-TZ";
-    speechSynthesis.speak(msg);
-    aIndex=(aIndex+1)%announce.length;
-  }
-},40000);
+let lessonAdInterval;
+let lessonAdIndex=0;
 
-/* CHATGPT */
-function openChatGPT(){
-  window.open("https://chat.openai.com/","_blank");
+/* FIX RESET */
+function resetAdImage(){
+  adImg.classList.remove("lessonFade");
+  adImg.style.opacity="1";
+  adImage.style.right="-100%";
+
+  if(adImages.length>0){
+    adImg.src=adImages[0];
+  }
 }
 
-/* VIDEO SOUND CONTROL */
-const videoMuteBtn=document.getElementById("videoMuteBtn");
-let isMuted=true;
+/* GLOBAL ADS */
+function showAd(){
+if(currentLesson!==null) return;
 
-videoMuteBtn.onclick=function(){
-  isMuted=!isMuted;
-  video.muted=isMuted;
+adImg.style.opacity="1";
+adImg.src=adImages[adIndex];
 
-  if(isMuted){
-    videoMuteBtn.innerText="🔇 Unmute Video";
-  }else{
-    videoMuteBtn.innerText="🔊 Mute Video";
-    video.play().catch(()=>{});
-  }
+setTimeout(()=>{adImage.style.right="0";},50);
+
+setTimeout(()=>{adImage.style.right="-100%";},8000);
+
+adIndex=(adIndex+1)%adImages.length;
+}
+
+function startAds(){
+clearInterval(adInterval);
+resetAdImage();
+showAd();
+adInterval=setInterval(showAd,25000);
+}
+
+function stopAds(){
+clearInterval(adInterval);
+adImage.style.right="-100%";
+}
+
+/* LESSON ADS */
+function startLessonAds(id){
+stopLessonAds();
+if(!lessonAds[id]) return;
+
+lessonAdIndex=0;
+
+function showLesson(){
+adImg.classList.add("lessonFade");
+adImg.style.opacity="0";
+
+setTimeout(()=>{
+adImg.src=lessonAds[id][lessonAdIndex];
+adImage.style.right="0";
+
+setTimeout(()=>adImg.style.opacity="1",100);
+
+setTimeout(()=>{
+adImg.style.opacity="0";
+adImage.style.right="-100%";
+},8000);
+
+lessonAdIndex=(lessonAdIndex+1)%lessonAds[id].length;
+},500);
+}
+
+showLesson();
+lessonAdInterval=setInterval(showLesson,25000);
+}
+
+function stopLessonAds(){
+clearInterval(lessonAdInterval);
+}
+
+/* VIDEO */
+let lessons={
+1:["https://i.imgur.com/YOYyJ49.mp4","https://i.imgur.com/KZlMkqV.png"],
+2:["shortheart.mp4"],
+3:["htt.mp4"],
+4:["https://i.imgur.com/nXmK9G4.mp4"]
 };
 
-/* FULLSCREEN */
-document.addEventListener("click",()=>{
-  document.documentElement.requestFullscreen?.();
+let playlist=[].concat(...Object.values(lessons));
+let index=0;
+
+function playVideo(i){
+if(i>=playlist.length)i=0;
+if(i<0)i=playlist.length-1;
+index=i;
+video.src=playlist[index];
+video.play().catch(()=>{});
+}
+playVideo(0);
+video.onended=()=>playVideo(index+1);
+
+/* CONTROLS */
+toggleBtn.onclick=()=>controls.classList.toggle("show");
+prev.onclick=()=>playVideo(index-1);
+next.onclick=()=>playVideo(index+1);
+rew.onclick=()=>video.currentTime-=10;
+ff.onclick=()=>video.currentTime+=10;
+playPause.onclick=()=>video.paused?video.play():video.pause();
+
+/* KEYPAD */
+const display=document.getElementById("display");
+
+keypadToggle.onclick=()=>{
+keypad.style.display=keypad.style.display==="none"?"block":"none";
+setTimeout(()=>display.focus(),200);
+};
+
+function pressKey(n){display.value+=n;}
+function clearInput(){display.value="";}
+
+function submitLesson(){
+let v=display.value;
+
+if(lessons[v]){
+currentLesson=v;
+playlist=lessons[v];
+index=0;
+playVideo(0);
+
+stopAds();
+startLessonAds(v);
+}
+
+display.value="";
+keypad.style.display="none";
+}
+
+/* FINAL FIX */
+function refreshLessons(){
+currentLesson=null;
+
+playlist=[].concat(...Object.values(lessons));
+index=0;
+playVideo(0);
+
+stopLessonAds();
+stopAds();
+
+adIndex=0;
+resetAdImage();
+
+setTimeout(()=>startAds(),200);
+
+display.value="";
+keypad.style.display="none";
+}
+
+/* START */
+startAds();
+
+display.addEventListener("keypress",e=>{
+if(e.key==="Enter") submitLesson();
 });
 
 </script>
