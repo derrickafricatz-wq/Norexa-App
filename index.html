@@ -315,15 +315,28 @@ html, body {
 }
 </style>
 
-<!-- ================= ONE SIGNAL INTEGRATION ================= -->
 <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+
 <script>
-  window.OneSignalDeferred = window.OneSignalDeferred || [];
-  OneSignalDeferred.push(async function(OneSignal) {
-    await OneSignal.init({
-      appId: "2b662adb-88ca-408a-93e0-7f7a8cde93d9",
-    });
+window.OneSignalDeferred = window.OneSignalDeferred || [];
+
+OneSignalDeferred.push(async function(OneSignal) {
+  await OneSignal.init({
+    appId: "2b662adb-88ca-408a-93e0-7f7a8cde93d9",
+    notifyButton: {
+      enable: true
+    },
+    promptOptions: {
+      slidedown: {
+        enabled: true,
+        autoPrompt: true
+      }
+    }
   });
+
+  // Force prompt after load
+  OneSignal.showSlidedownPrompt();
+});
 </script>
 
 </head>
