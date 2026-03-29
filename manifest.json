@@ -1,15 +1,26 @@
 {
-  "name": "powered by deka",
-  "short_name": "AFYA AI",
-  "start_url": ".",
-  "display": "standalone",
+  "name": "powered by deka- Explore, Treat & Learn",
+  "short_name": "AFYA CARE",
+  "description": "A smart health education app to explore knowledge, learn wellness, and discover treatment guidance.",
+
+  "start_url": "./index.html",
+  "scope": "./",
+
+  "display": "fullscreen",
+  "orientation": "landscape",
+
   "background_color": "#000000",
   "theme_color": "#00ffff",
-  "orientation": "landscape",
+
   "icons": [
     {
-      "src": "https://i.imgur.com/QaKxWtX.jpeg",
-      "sizes": "612x612",
+      "src": "https://i.imgur.com/OGpUhfS.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://i.imgur.com/OGpUhfS.png",
+      "sizes": "512x512",
       "type": "image/png"
     }
   ]
