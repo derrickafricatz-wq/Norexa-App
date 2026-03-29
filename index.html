@@ -6,56 +6,337 @@
 
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#00ffff">
+
 <link href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap" rel="stylesheet">
 
 <style>
-html, body {margin:0; padding:0; height:100%; width:100%; background:black; color:white; font-family:Arial, Helvetica, sans-serif; overflow:hidden;}
-#brandVideo {position:fixed; inset:0; width:100%; height:100%; object-fit:cover; z-index:0;}
-#logoTicker {position:fixed; top:0; left:0; width:100%; height:300px; overflow:hidden; z-index:10; pointer-events:none;}
-#logoTickerInner {display:flex; white-space:nowrap; animation:scrollLogo 25s linear infinite;}
-#logoTickerInner img {height:290px; margin-right:120px; opacity:0.9;}
-@keyframes scrollLogo {0%{transform:translateX(100%);} 100%{transform:translateX(-100%);}}
-#clockBox {position:fixed; top:10px; left:20px; font-size:32px; background:rgba(0,0,0,0.6); padding:10px 18px; border-radius:10px; z-index:10;}
-#weatherBox {position:fixed; top:10px; right:20px; background:rgba(0,0,0,0.6); padding:10px; border-radius:18px; z-index:10; line-height:1.5;}
-#adImage {position:fixed; top:0; right:-100%; width:50%; height:100%; background:black; display:flex; align-items:center; justify-content:center; z-index:6; transition:right 0.6s ease;}
-#adImg {width:100%; height:100%; object-fit:cover;}
-.lessonFade {opacity:0; transition:opacity 0.8s ease-in-out;}
-#scrollBanner {position:fixed; bottom:0; width:100%; background:black; z-index:10; padding:8px 0;}
-#scrollText {white-space:nowrap; animation:scroll 30s linear infinite; font-size:30px;}
-.dekaStyle {font-family:'Russo One', sans-serif; color:#00ffff; font-size:38px;}
-@keyframes scroll {from{transform:translateX(100%);} to{transform:translateX(-100%);}}
-#lessonLabel {position:fixed; top:70px; left:20px; background:rgba(0,0,0,0.6); padding:10px 16px; border-radius:14px; font-size:16px; color:#00ffff; z-index:5;}
-#toggleBtn,#keypadToggle,#healthyBtn {position:fixed; bottom:62px; width:58px; height:58px; border-radius:50%; background:linear-gradient(145deg,#00ffff,#00baba); color:black; border:none; z-index:6; font-size:24px;}
-#toggleBtn{right:20px;} #keypadToggle{left:20px;} #healthyBtn{right:90px;}
-#controls {position:fixed; bottom:90px; right:20px; width:220px; background:rgba(0,0,0,0.78); border-radius:22px; z-index:5; opacity:0; pointer-events:none;}
-#controls.show {opacity:1; pointer-events:auto;}
-#controlGrid {display:grid; grid-template-columns:repeat(3,1fr); gap:10px; padding:14px;}
-.ctrl-btn {width:48px; height:48px; border-radius:50%; border:none; background:#00ffff;}
-#keypad {position:fixed; bottom:140px; left:50%; transform:translateX(-50%); width:260px; background:rgba(0,0,0,0.9); border-radius:20px; padding:12px; z-index:20; display:none;}
-#display {width:100%; padding:10px; margin-bottom:10px; border-radius:10px; border:none; text-align:center; background:black; color:#00ffff;}
-#keys {display:grid; grid-template-columns:repeat(3,1fr); gap:10px;}
-#keys button {height:55px; border:none; border-radius:12px; background:#00ffff; color:black;}
-#healthyContainer {position:fixed; top:0; left:0; width:100%; height:100%; background:black; z-index:50; display:flex; flex-direction:column; color:#00ffff; font-family:'Russo One',sans-serif; overflow:hidden;}
-#healthyTopicsRow {display:flex; justify-content:flex-start; overflow-x:auto; padding:12px; gap:12px; background:rgba(0,0,0,0.85); flex:0 0 auto;}
-#healthyTopicsRow button {min-width:120px; padding:10px; border:none; border-radius:8px; background:#00ffff; color:black; cursor:pointer; flex-shrink:0;}
-#healthyScrollOuter {flex:1 1 auto; overflow:hidden; position:relative; padding:12px;}
-#healthyScrollInner {position:absolute; top:0; left:0; width:100%;}
-#healthyControls {flex:0 0 auto; display:flex; justify-content:space-between; padding:12px; background:rgba(0,0,0,0.85);}
-#healthyControls button {padding:10px 16px; border-radius:8px; border:none; background:#00ffff; color:black; cursor:pointer;}
-#healthyScrollInner img {max-width:100%; display:inline-block; margin:12px 0; border-radius:12px; max-height:500px;}
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  background: black;
+  color: white;
+  font-family: Arial, Helvetica, sans-serif;
+  overflow: hidden;
+}
+
+/* VIDEO */
+#brandVideo {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+
+/* LOGO TICKER */
+#logoTicker {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 300px;
+  overflow: hidden;
+  z-index: 10;
+  pointer-events: none;
+}
+
+#logoTickerInner {
+  display: flex;
+  white-space: nowrap;
+  animation: scrollLogo 25s linear infinite;
+}
+
+#logoTickerInner img {
+  height: 290px;
+  margin-right: 120px;
+  opacity: 0.9;
+}
+
+@keyframes scrollLogo {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+/* CLOCK */
+#clockBox {
+  position: fixed;
+  top: 10px;
+  left: 20px;
+  font-size: 32px;
+  background: rgba(0,0,0,0.6);
+  padding: 10px 18px;
+  border-radius: 10px;
+  z-index: 10;
+}
+
+/* WEATHER */
+#weatherBox {
+  position: fixed;
+  top: 10px;
+  right: 20px;
+  background: rgba(0,0,0,0.6);
+  padding: 10px;
+  border-radius: 18px;
+  z-index: 10;
+  line-height: 1.5;
+}
+
+/* ADS */
+#adImage {
+  position: fixed;
+  top: 0;
+  right: -100%;
+  width: 50%;
+  height: 100%;
+  background: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 6;
+  transition: right 0.6s ease;
+}
+
+#adImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* LESSON FADE */
+.lessonFade {
+  opacity: 0;
+  transition: opacity 0.8s ease-in-out;
+}
+
+/* SCROLL BANNER */
+#scrollBanner {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background: black;
+  z-index: 10;
+  padding: 8px 0;
+}
+
+#scrollText {
+  white-space: nowrap;
+  animation: scroll 30s linear infinite;
+  font-size: 30px;
+}
+
+.dekaStyle {
+  font-family: 'Russo One', sans-serif;
+  color: #00ffff;
+  font-size: 38px;
+}
+
+@keyframes scroll {
+  from { transform: translateX(100%); }
+  to { transform: translateX(-100%); }
+}
+
+/* LESSON LABEL */
+#lessonLabel {
+  position: fixed;
+  top: 70px;
+  left: 20px;
+  background: rgba(0,0,0,0.6);
+  padding: 10px 16px;
+  border-radius: 14px;
+  font-size: 16px;
+  color: #00ffff;
+  z-index: 5;
+}
+
+/* BUTTONS */
+#toggleBtn, #keypadToggle, #healthyBtn {
+  position: fixed;
+  bottom: 62px;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #00ffff, #00baba);
+  color: black;
+  border: none;
+  z-index: 6;
+  font-size: 24px;
+}
+
+#toggleBtn { right: 20px; }
+#keypadToggle { left: 20px; }
+#healthyBtn { right: 90px; }
+
+/* CONTROLS */
+#controls {
+  position: fixed;
+  bottom: 90px;
+  right: 20px;
+  width: 220px;
+  background: rgba(0,0,0,0.78);
+  border-radius: 22px;
+  z-index: 5;
+  opacity: 0;
+  pointer-events: none;
+}
+
+#controls.show { opacity: 1; pointer-events: auto; }
+
+#controlGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  padding: 14px;
+}
+
+.ctrl-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: none;
+  background: #00ffff;
+}
+
+/* KEYPAD */
+#keypad {
+  position: fixed;
+  bottom: 140px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 260px;
+  background: rgba(0,0,0,0.9);
+  border-radius: 20px;
+  padding: 12px;
+  z-index: 20;
+  display: none;
+}
+
+#display {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  border: none;
+  text-align: center;
+  background: black;
+  color: #00ffff;
+}
+
+#keys {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+#keys button {
+  height: 55px;
+  border: none;
+  border-radius: 12px;
+  background: #00ffff;
+  color: black;
+}
+
+/* HEALTHY CLASS STYLES */
+#healthyContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: black;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  color: #00ffff;
+  font-family: 'Russo One', sans-serif;
+  overflow: hidden;
+}
+
+#healthyTopicsRow {
+  display: flex;
+  justify-content: flex-start;
+  overflow-x: auto;
+  padding: 12px;
+  gap: 12px;
+  background: rgba(0,0,0,0.85);
+  flex: 0 0 auto;
+}
+
+#healthyTopicsRow button {
+  min-width: 120px;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  background: #00ffff;
+  color: black;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+#healthyScrollOuter {
+  flex: 1 1 auto;
+  overflow: hidden;
+  position: relative;
+  padding: 12px;
+}
+
+#healthyScrollInner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
+#healthyControls {
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: space-between;
+  padding: 12px;
+  background: rgba(0,0,0,0.85);
+}
+
+#healthyControls button {
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: none;
+  background: #00ffff;
+  color: black;
+  cursor: pointer;
+}
+
+#healthyScrollInner img {
+  max-width: 100%;
+  display: inline-block;
+  margin: 12px 0;
+  border-radius: 12px;
+  max-height: 500px;
+}
 </style>
 </head>
 <body>
 
 <video id="brandVideo" autoplay playsinline></video>
 
-<div id="logoTicker"><div id="logoTickerInner"><img src="https://i.imgur.com/KZlMkqV.png"><img src="https://i.imgur.com/KZlMkqV.png"></div></div>
+<div id="logoTicker">
+  <div id="logoTickerInner">
+    <img src="https://i.imgur.com/KZlMkqV.png">
+    <img src="https://i.imgur.com/KZlMkqV.png">
+  </div>
+</div>
+
 <div id="clockBox"></div>
 <div id="weatherBox">Loading...</div>
 <div id="lessonLabel">ALL HEALTH LESSONS. By Deka</div>
+
 <div id="adImage"><img id="adImg"></div>
 
-<div id="scrollBanner"><div id="scrollText"><span class="dekaStyle">AFYA NJEMA</span> • Kwa Kesho Inayojengwa Na Watu Imara •</div></div>
+<div id="scrollBanner">
+  <div id="scrollText">
+    <span class="dekaStyle">AFYA NJEMA</span> • Kwa Kesho Inayojengwa Na Watu Imara •
+  </div>
+</div>
 
 <button id="toggleBtn">≡</button>
 <button id="keypadToggle">⌨</button>
@@ -64,10 +345,18 @@ html, body {margin:0; padding:0; height:100%; width:100%; background:black; colo
 <div id="keypad">
   <input id="display" type="number">
   <div id="keys">
-    <button onclick="pressKey(1)">1</button><button onclick="pressKey(2)">2</button><button onclick="pressKey(3)">3</button>
-    <button onclick="pressKey(4)">4</button><button onclick="pressKey(5)">5</button><button onclick="pressKey(6)">6</button>
-    <button onclick="pressKey(7)">7</button><button onclick="pressKey(8)">8</button><button onclick="pressKey(9)">9</button>
-    <button onclick="clearInput()">C</button><button onclick="pressKey(0)">0</button><button onclick="submitLesson()">OK</button>
+    <button onclick="pressKey(1)">1</button>
+    <button onclick="pressKey(2)">2</button>
+    <button onclick="pressKey(3)">3</button>
+    <button onclick="pressKey(4)">4</button>
+    <button onclick="pressKey(5)">5</button>
+    <button onclick="pressKey(6)">6</button>
+    <button onclick="pressKey(7)">7</button>
+    <button onclick="pressKey(8)">8</button>
+    <button onclick="pressKey(9)">9</button>
+    <button onclick="clearInput()">C</button>
+    <button onclick="pressKey(0)">0</button>
+    <button onclick="submitLesson()">OK</button>
     <button onclick="refreshLessons()">↻</button>
   </div>
 </div>
@@ -83,14 +372,16 @@ html, body {margin:0; padding:0; height:100%; width:100%; background:black; colo
 </div>
 
 <script>
-/* ========== VIDEO ========== */
-const video=document.getElementById("brandVideo");
-document.body.addEventListener("click",()=>{video.muted=false;video.volume=1;video.play().catch(()=>{});},{once:true});
+/* ================= VIDEO ================= */
+const video = document.getElementById("brandVideo");
+document.body.addEventListener("click", () => {
+  video.muted = false; video.volume = 1; video.play().catch(()=>{});
+},{once:true});
 
-/* ========== CLOCK ========== */
+/* ================= CLOCK ================= */
 setInterval(()=>clockBox.innerText=new Date().toLocaleTimeString(),1000);
 
-/* ========== WEATHER ========== */
+/* ================= WEATHER ================= */
 const cities=["Dar es Salaam","Dodoma","Arusha","Mwanza"];
 async function loadWeather(){
   let html="<b>Weather TZ</b><br>";
@@ -109,34 +400,48 @@ async function loadWeather(){
 }
 loadWeather(); setInterval(loadWeather,600000);
 
-/* ========== ADS ========== */
+/* ================= ADS ================= */
 const adImages=["https://i.imgur.com/HB2li5t.jpeg","https://i.imgur.com/dFw0tik.png"];
-adImages.forEach(src=>new Image().src=src);
-let adIndex=0, adInterval=null, currentLesson=null;
-const lessonAds={1:["https://i.imgur.com/UPgPdWT.jpeg","https://i.imgur.com/HdKedqJ.jpeg"],2:["https://i.imgur.com/lvRn9kT.jpeg","https://i.imgur.com/egaJf4s.png"]};
-let lessonAdInterval=null, lessonAdIndex=0;
+adImages.forEach(src=>{new Image().src=src;});
+let adIndex=0, adInterval, currentLesson=null;
+const lessonAds={1:["https://i.imgur.com/UPgPdWT.jpeg","https://i.imgur.com/HdKedqJ.jpeg"],
+                2:["https://i.imgur.com/lvRn9kT.jpeg","https://i.imgur.com/egaJf4s.png"]};
+let lessonAdInterval, lessonAdIndex=0;
 
 function resetAdImage(){ adImg.classList.remove("lessonFade"); adImg.style.opacity="1"; adImage.style.right="-100%"; if(adImages.length>0) adImg.src=adImages[0]; }
 
 function showAd(){ if(currentLesson!==null) return; adImg.style.opacity="1"; adImg.src=adImages[adIndex]; setTimeout(()=>adImage.style.right="0",50); setTimeout(()=>adImage.style.right="-100%",8000); adIndex=(adIndex+1)%adImages.length; }
+
 function startAds(){ clearInterval(adInterval); resetAdImage(); showAd(); adInterval=setInterval(showAd,25000); }
 function stopAds(){ clearInterval(adInterval); adImage.style.right="-100%"; }
+
 function stopLessonAds(){ if(lessonAdInterval){ clearInterval(lessonAdInterval); lessonAdInterval=null; } }
+
 function startLessonAds(lessonId){
   stopLessonAds();
   if(!lessonAds[lessonId]) return;
   lessonAdIndex=0;
-  function showLessonAd(){ const ads=lessonAds[lessonId]; adImg.style.opacity="1"; adImg.src=ads[lessonAdIndex]; setTimeout(()=>adImage.style.right="0",50); setTimeout(()=>adImage.style.right="-100%",8000); lessonAdIndex=(lessonAdIndex+1)%ads.length; }
-  showLessonAd(); lessonAdInterval=setInterval(showLessonAd,25000);
+  function showLessonAd(){
+    const ads=lessonAds[lessonId];
+    adImg.style.opacity="1"; adImg.src=ads[lessonAdIndex];
+    setTimeout(()=>adImage.style.right="0",50);
+    setTimeout(()=>adImage.style.right="-100%",8000);
+    lessonAdIndex=(lessonAdIndex+1)%ads.length;
+  }
+  showLessonAd();
+  lessonAdInterval=setInterval(showLessonAd,25000);
 }
 
-/* ========== VIDEO PLAYLIST ========== */
+/* ================= VIDEO PLAYLIST ================= */
 let lessons={1:["https://i.imgur.com/YOYyJ49.mp4","https://i.imgur.com/cUigBbY.mp4"],2:["https://i.imgur.com/nXmK9G4.mp4"]};
-let playlist=[].concat(...Object.values(lessons)), index=0;
-function playVideo(i){ if(i>=playlist.length) i=0; if(i<0) i=playlist.length-1; index=i; video.src=playlist[index]; video.play().catch(()=>{}); }
-playVideo(0); video.onended=()=>playVideo(index+1);
+let playlist=[].concat(...Object.values(lessons));
+let index=0;
 
-/* ========== CONTROLS ========== */
+function playVideo(i){ if(i>=playlist.length) i=0; if(i<0) i=playlist.length-1; index=i; video.src=playlist[index]; video.play().catch(()=>{}); }
+playVideo(0);
+video.onended=()=>playVideo(index+1);
+
+/* ================= CONTROLS ================= */
 toggleBtn.onclick=()=>controls.classList.toggle("show");
 prev.onclick=()=>playVideo(index-1);
 next.onclick=()=>playVideo(index+1);
@@ -144,30 +449,59 @@ rew.onclick=()=>video.currentTime-=10;
 ff.onclick=()=>video.currentTime+=10;
 playPause.onclick=()=>video.paused?video.play():video.pause();
 
-/* ========== KEYPAD ========== */
+/* ================= KEYPAD ================= */
 const display=document.getElementById("display");
 keypadToggle.onclick=()=>{keypad.style.display=keypad.style.display==="none"?"block":"none"; setTimeout(()=>display.focus(),200);};
 function pressKey(n){ display.value+=n; }
 function clearInput(){ display.value=""; }
-function submitLesson(){ let v=display.value; if(lessons[v]){ currentLesson=v; playlist=lessons[v]; index=0; playVideo(0); stopAds(); startLessonAds(v); } display.value=""; keypad.style.display="none"; }
-function refreshLessons(){ currentLesson=null; playlist=[].concat(...Object.values(lessons)); index=0; playVideo(0); stopLessonAds(); stopAds(); adIndex=0; resetAdImage(); setTimeout(()=>startAds(),200); display.value=""; keypad.style.display="none"; }
+function submitLesson(){
+  let v=display.value;
+  if(lessons[v]){
+    currentLesson=v; playlist=lessons[v]; index=0; playVideo(0); stopAds(); startLessonAds(v);
+  }
+  display.value=""; keypad.style.display="none";
+}
+function refreshLessons(){
+  currentLesson=null; playlist=[].concat(...Object.values(lessons)); index=0; playVideo(0);
+  stopLessonAds(); stopAds(); adIndex=0; resetAdImage(); setTimeout(()=>startAds(),200);
+  display.value=""; keypad.style.display="none";
+}
 startAds();
 display.addEventListener("keypress",e=>{if(e.key==="Enter") submitLesson();});
 
-/* ========== HEALTHY CLASS FROM JSON ========== */
-let healthyTopics={}, healthyActive=false, scrollInterval=null, scrollOuter=null, scrollInner=null;
+/* ================= HEALTHY CLASS ================= */
+const healthyTopics={
+  water:{lines:[
+    "Kunywa maji mwilini husaidia kuendelea kuwa na maji ya kutosha mwilini na kuzuia upungufu wa maji mwilini kwa muda mrefu.",
+    "Husaidia katika mmeng'enyo wa chakula na kuhakikisha virutubisho vinachukuliwa vizuri mwilini.",
+    {type:"image",src:"https://i.imgur.com/PrtHFTa.jpeg"},
+    "Kusaidia kuondoa sumu mwilini na kuimarisha kazi ya figo.",
+    "Husaidia ngozi kuwa na afya na kuzuia ukavu wa ngozi."
+  ]},
+  lungs:{lines:[
+    "Pumzi ni muhimu kwa kutuma oksijeni katika damu na kuondoa kaboni dioksidi.",
+    "Mazoezi ya mwili husaidia kuongeza uwezo wa mapafu na kufanya pumzi kuwa thabiti.",
+    {type:"image",src:"https://i.imgur.com/EWlf9oK.jpeg"},
+    "Kuepuka uvutaji wa sigara husaidia kuzuia uharibifu wa mapafu.",
+    "Mazoezi ya kupumua kwa kina husaidia kuongeza uwezo wa mapafu.",
+    "Kuepuka mazingira yenye uchafu na vumbi husaidia afya ya mapafu.",
+    "Kuweka mwili kwenye mkao mzuri husaidia mapafu kufanya kazi vizuri."
+  ]},
+  overstress:{lines:[
+    "Mfadhaiko wa kupita kiasi (mfadhaiko sugu) husababisha kuzorota sana kwa mwili na kiakili, na kusababisha dalili kama vile maumivu ya kichwa, wasiwasi, mkazo wa misuli, uchovu na shida za kusaga chakula.",
+    {type:"image",src:"https://i.imgur.com/vfEZO1V.jpeg"},
+    
+    "Kushinda mfadhaiko kunahusisha mchanganyiko wa shughuli za kimwili, mbinu za kupumzika kiakili, na marekebisho ya mtindo wa maisha. Mikakati muhimu ni pamoja na mazoezi ya kawaida, kupumua kwa kina, kufanya mazoezi ya kuzingatia, kuweka mipaka, kudumisha lishe bora, na kupata usingizi wa kutosha. Usaidizi wa haraka unaofaa ni pamoja na kuchukua mapumziko, kunyoosha, au kutembea.",
+    {type:"image",src:"https://i.imgur.com/CTv6Baj.jpeg"},
+  ]}
+};
 
-async function loadHealthyTopicsJSON(){
-  try{
-    const res=await fetch("healthy_topics.json");
-    healthyTopics=await res.json();
-  }catch(err){ alert("Failed to load healthy topics JSON"); console.error(err); }
-}
-loadHealthyTopicsJSON();
+let healthyActive=false, scrollInterval=null, scrollOuter=null, scrollInner=null;
 
 function showHealthyClass(){
   healthyActive=true; stopAds(); stopLessonAds(); video.pause();
-  let container=document.getElementById("healthyContainer"); if(container) container.remove();
+  let container=document.getElementById("healthyContainer");
+  if(container) container.remove();
   container=document.createElement("div"); container.id="healthyContainer"; document.body.appendChild(container);
 
   const topicsRow=document.createElement("div"); topicsRow.id="healthyTopicsRow";
@@ -182,30 +516,46 @@ function showHealthyClass(){
   scrollInner=document.createElement("div"); scrollInner.id="healthyScrollInner"; scrollOuter.appendChild(scrollInner);
 
   const controls=document.createElement("div"); controls.id="healthyControls";
+
   const backBtn=document.createElement("button"); backBtn.innerText="⏮ BACK"; backBtn.onclick=showHealthyClass;
   const playBtn=document.createElement("button"); playBtn.innerText="⏯ PLAY/PAUSE"; playBtn.onclick=toggleScroll;
+
   const readBtn=document.createElement("button"); readBtn.innerText="🔊 READ"; readBtn.onclick=()=>readAloud(scrollInner.innerText);
+
   controls.appendChild(backBtn); controls.appendChild(playBtn); controls.appendChild(readBtn);
   container.appendChild(controls);
 }
 
 let scrollSpeed=1;
 function loadHealthyTopic(topicKey){
-  const topic=healthyTopics[topicKey]; if(!topic) return;
-  scrollInner.innerHTML="";
+  const topic=healthyTopics[topicKey]; scrollInner.innerHTML="";
   topic.lines.forEach(line=>{
     const div=document.createElement("div"); div.style.padding="10px 0"; div.style.fontSize="34px"; div.style.lineHeight="3";
     if(typeof line==="string") div.innerText=line;
-    if(typeof line==="object" && line.type==="image"){ const img=document.createElement("img"); img.src=line.src; div.appendChild(img); }
+    if(typeof line==="object" && line.type==="image"){
+      const img=document.createElement("img"); img.src=line.src; div.appendChild(img);
+    }
     scrollInner.appendChild(div);
   });
   scrollInner.style.top=scrollOuter.clientHeight+"px"; startScrolling();
 }
 
-function startScrolling(){ if(scrollInterval) clearInterval(scrollInterval); scrollInterval=setInterval(()=>{ let top=parseFloat(scrollInner.style.top); top-=scrollSpeed; if(top+scrollInner.offsetHeight<0) top=scrollOuter.clientHeight; scrollInner.style.top=top+"px"; },40); }
+function startScrolling(){ if(scrollInterval) clearInterval(scrollInterval);
+  scrollInterval=setInterval(()=>{
+    let top=parseFloat(scrollInner.style.top); top-=scrollSpeed;
+    if(top+scrollInner.offsetHeight<0) top=scrollOuter.clientHeight;
+    scrollInner.style.top=top+"px";
+  },40);
+}
+
 function toggleScroll(){ if(scrollInterval){ clearInterval(scrollInterval); scrollInterval=null; } else startScrolling(); }
 
-function readAloud(text){ if(!('speechSynthesis' in window)) return alert("Browser does not support speech synthesis"); const utter=new SpeechSynthesisUtterance(text); utter.lang='sw-TZ'; speechSynthesis.speak(utter); }
+function readAloud(text){
+  if(!('speechSynthesis' in window)) return alert("Browser does not support speech synthesis");
+  const utter=new SpeechSynthesisUtterance(text);
+  utter.lang='sw-TZ';
+  speechSynthesis.speak(utter);
+}
 
 healthyBtn.onclick=showHealthyClass;
 </script>
