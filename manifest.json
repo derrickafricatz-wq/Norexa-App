@@ -1,7 +1,6 @@
 {
-  "name": "Powered By Deka - Explore, Treat & Learn",
+  "name": "Powered By Deka - explore, treat & learn",
   "short_name": "afya care",
-  "description": "A smart health education app to explore knowledge, learn wellness, and discover treatment guidance.",
 
   "start_url": "./index.html",
   "scope": "./",
@@ -14,12 +13,12 @@
 
   "icons": [
     {
-      "src": "https://i.imgur.com/OGpUhfS.png",
+      "src": "https://i.imgur.com/EIF0Hx1.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "https://i.imgur.com/OGpUhfS.png",
+      "src": "https://i.imgur.com/EIF0Hx1.png",
       "sizes": "512x512",
       "type": "image/png"
     }
