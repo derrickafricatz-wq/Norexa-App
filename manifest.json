@@ -1,6 +1,6 @@
 {
   "name": "powered by deka - explore, treat & learn",
-  "short_name": "afya care",
+  "short_name": "Afya Care",
 
   "start_url": "./index.html",
   "scope": "./",
@@ -13,12 +13,12 @@
 
   "icons": [
     {
-      "src": "https://i.imgur.com/EIF0Hx1.png",
+      "src": "https://i.imgur.com/yBXHtCm.jpeg",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "https://i.imgur.com/EIF0Hx1.png",
+      "src": "https://i.imgur.com/yBXHtCm.jpeg",
       "sizes": "512x512",
       "type": "image/png"
     }
