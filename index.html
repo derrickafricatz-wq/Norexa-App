@@ -314,6 +314,27 @@ html, body {
   max-height: 500px;
 }
 </style>
+
+<!-- ================= ONE SIGNAL INTEGRATION ================= -->
+<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+<script>
+  window.OneSignalDeferred = window.OneSignalDeferred || [];
+  OneSignalDeferred.push(async function(OneSignal) {
+    await OneSignal.init({
+      appId: "d0f4d98a-2070-478d-a5ae-d182993b7808",
+      notifyButton: {
+        enable: true
+      },
+    });
+  });
+</script>
+
+<script>
+  OneSignalDeferred.push(function(OneSignal) {
+    OneSignal.showSlidedownPrompt();
+  });
+</script>
+
 </head>
 <body>
 
