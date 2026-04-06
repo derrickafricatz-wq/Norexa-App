@@ -31,35 +31,6 @@ html, body {
   z-index: 0;
 }
 
-/* LOGO TICKER */
-#logoTicker {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 300px;
-  overflow: hidden;
-  z-index: 10;
-  pointer-events: none;
-}
-
-#logoTickerInner {
-  display: flex;
-  white-space: nowrap;
-  animation: scrollLogo 45s linear infinite;
-}
-
-#logoTickerInner img {
-  height: 170px;
-  margin-right: 120px;
-  opacity: 0.9;
-}
-
-@keyframes scrollLogo {
-  0% { transform: translateX(100%); }
-  100% { transform: translateX(-100%); }
-}
-
 /* CLOCK */
 #clockBox {
   position: fixed;
@@ -329,8 +300,7 @@ html, body {
 
 #healthyScrollInner img {
   max-width: 100%;
-  border-radius: 12px;
-  margin: 10px 0;
+  height: auto;
 }
 
 #healthyControls {
@@ -360,13 +330,6 @@ html, body {
 
 <video id="brandVideo" autoplay muted playsinline></video>
 
-<div id="logoTicker">
-  <div id="logoTickerInner">
-    <img src="https://i.imgur.com/KZlMkqV.png">
-    <img src="https://i.imgur.com/KZlMkqV.png">
-  </div>
-</div>
-
 <div id="clockBox"></div>
 <div id="weatherBox">Loading...</div>
 <div id="lessonLabel">ALL HEALTH LESSONS. By Deka</div>
@@ -375,7 +338,7 @@ html, body {
 
 <div id="scrollBanner">
   <div id="scrollText">
-    <span class="dekaStyle">AFYA NJEMA</span> • Kwa Kesho Inayojengwa Na Watu Imara •
+    <span class="dekaStyle">AFYA CARE</span> • Explore.  Treat.  Learn.
   </div>
 </div>
 
@@ -442,7 +405,7 @@ const guideSteps = [
   {text: "Inside a lesson, click any line or image to mark it for printing."},
   {text: "Press the '🖨 PRINT' button to print only the marked parts."},
   {text: "Swipe up/down or use the top buttons to hide/show topics."},
-  {text: "That's it! Enjoy exploring AFYA NJEMA."}
+  {text: "That's it! Enjoy The Journey."}
 ];
 
 let guideIndex = 0;
@@ -680,11 +643,44 @@ openHealth.onclick=showHealthyClass;
 function showHealthyClass(){
   if(document.getElementById("healthyContainer")) return;
   const c=document.createElement("div"); c.id="healthyContainer"; document.body.appendChild(c);
-
+  
   const topics=document.createElement("div"); topics.id="topicsPanel";
+  
+  const topBar = document.createElement("div");
+topBar.style.display = "flex";
+topBar.style.gap = "10px";
 
-  const toggle=document.createElement("button"); toggle.innerText="☰ HIDE";
-  toggle.onclick=()=>toggleTopics(toggle);
+// TOGGLE BUTTON
+const toggle = document.createElement("button");
+toggle.innerText = "☰ HIDE";
+toggle.onclick = () => toggleTopics(toggle);
+
+// EXIT BUTTON
+const exitBtn = document.createElement("button");
+exitBtn.innerText = "✖ EXIT";
+exitBtn.style.background = "red";
+exitBtn.style.color = "white";
+
+exitBtn.onclick = () => {
+  document.getElementById("healthyContainer").remove();
+
+  // Restore video + ads system
+  stopLessonAds();
+  currentLesson = null;
+  playlist = [].concat(...Object.values(lessons));
+  index = 0;
+  playVideo(0);
+
+  // Restart global ads
+  stopAds();
+  adIndex = 0;
+  resetAdImage();
+  setTimeout(() => startAds(), 200);
+};
+
+// ADD BOTH BUTTONS
+topBar.appendChild(toggle);
+topBar.appendChild(exitBtn);
 
   const list=document.createElement("div"); list.id="topicsList";
 
@@ -695,7 +691,7 @@ function showHealthyClass(){
     list.appendChild(b);
   });
 
-  topics.appendChild(toggle);
+  topics.appendChild(topBar);
   topics.appendChild(list);
   c.appendChild(topics);
 
