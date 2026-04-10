@@ -340,6 +340,20 @@ html, body {
 
 <body>
 
+<button id="installBtn" style="
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  padding:10px;
+  background:#00ffff;
+  border:none;
+  border-radius:10px;
+  display:none;
+  z-index:200;
+">
+Install App
+</button>
+
 <div id="guideOverlay" style="
   position:fixed; inset:0; background:rgba(0,0,0,0.7); color:#00ffff;
   z-index:100; display:flex; flex-direction:column; justify-content:center; 
@@ -475,7 +489,7 @@ async function loadWeather(){
 loadWeather(); setInterval(loadWeather,600000);
 
 /* ================= ADS ================= */
-const adImages=["https://i.imgur.com/Vq3ksCE.png","https://i.imgur.com/dFw0tik.png","https://i.imgur.com/A4ydlTv.jpeg"];
+const adImages=["https://i.imgur.com/Vq3ksCE.png","https://i.imgur.com/dFw0tik.png"];
 adImages.forEach(src=>{new Image().src=src;});
 let adIndex=0, adInterval, currentLesson=null;
 const lessonAds={1:["https://i.imgur.com/UPgPdWT.jpeg","https://i.imgur.com/HdKedqJ.jpeg"],
@@ -507,7 +521,7 @@ function startLessonAds(lessonId){
 }
 
 /* ================= VIDEO PLAYLIST ================= */
-let lessons={1:["https://i.imgur.com/YOYyJ49.mp4","https://i.imgur.com/cUigBbY.mp4"],2:["https://i.imgur.com/nXmK9G4.mp4"]};
+let lessons={1:["https://files.catbox.moe/vop7rd.mp4","https://i.imgur.com/cUigBbY.mp4"],2:["https://i.imgur.com/nXmK9G4.mp4"]};
 let playlist=[].concat(...Object.values(lessons));
 let index=0;
 
@@ -515,6 +529,26 @@ function playVideo(i){ if(i>=playlist.length) i=0; if(i<0) i=playlist.length-1; 
 playVideo(0);
 video.addEventListener("ended", () => {
   playVideo(index + 1);
+});
+
+/* INSTALL APP */
+let deferredPrompt;
+const installBtn = document.getElementById("installBtn");
+
+window.addEventListener("beforeinstallprompt", (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+
+  installBtn.style.display = "block"; // show button
+});
+
+installBtn.addEventListener("click", async () => {
+  if (!deferredPrompt) return;
+
+  deferredPrompt.prompt();
+  deferredPrompt = null;
+
+  installBtn.style.display = "none";
 });
 
 /* SMART SYSTEM */
@@ -881,7 +915,7 @@ function openTopic(key){
   topic.lines.forEach(line=>{
     const div=document.createElement("div");
     div.style.padding="15px 0";
-    div.style.fontSize="22px";
+    div.style.fontSize="24px";
     div.style.lineHeight="2";
     div.style.cursor = "pointer";  // indicate it can be selected
 
