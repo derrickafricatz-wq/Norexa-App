@@ -960,6 +960,14 @@ document.addEventListener("touchend",(e)=>{
     smartToggle.style.transform="translateY(100px)";
     controls.classList.remove("show");
     keypad.style.display="none";
+    // 🔥 ADD THIS
+announcementBox.style.display = "none";
+
+// 🔥 STOP AUDIO
+announcementAudio.pause();
+announcementAudio.currentTime = 0;
+isPlaying = false;
+announceBtn.innerText = "🔊 Play Announcement";
   }
 });
 
