@@ -634,6 +634,8 @@ announcementAudio.preload = "auto";
 announcementAudio.volume = 1;
 
 let isPlaying = false;
+let announceLoopTimer = null;
+const LOOP_DELAY = 120000; // 2 minutes
 
 const controls=document.getElementById("controls");
 const prev=document.getElementById("prev");
@@ -916,24 +918,48 @@ function toggleScroll(){
   } else startScrolling();
 }
 
+function playAnnouncementLoop() {
+  // 🔥 prevent multiple timers
+  if (announceLoopTimer) {
+    clearTimeout(announceLoopTimer);
+    announceLoopTimer = null;
+  }
+
+  video.pause();
+
+  announcementAudio.currentTime = 0;
+  announcementAudio.play();
+
+  announcementAudio.onended = () => {
+    if (!isPlaying) return;
+
+    announceLoopTimer = setTimeout(() => {
+      playAnnouncementLoop();
+    }, LOOP_DELAY);
+  };
+}
+
+function stopAnnouncementLoop() {
+  announcementAudio.pause();
+  announcementAudio.currentTime = 0;
+
+  if (announceLoopTimer) {
+    clearTimeout(announceLoopTimer);
+    announceLoopTimer = null;
+  }
+
+  video.play();
+}
+
 announceBtn.onclick = () => {
   if (!isPlaying) {
-
-    video.pause(); // stop video
-
-    announcementAudio.currentTime = 0; // restart clean
-    announcementAudio.play();
-
-    announceBtn.innerText = "⏸ Pause Announcement";
     isPlaying = true;
-
+    announceBtn.innerText = "⏸ Pause Announcement";
+    playAnnouncementLoop();
   } else {
-
-    announcementAudio.pause();
-    video.play();
-
-    announceBtn.innerText = "🔊 Play Announcement";
     isPlaying = false;
+    announceBtn.innerText = "🔊 Play Announcement";
+    stopAnnouncementLoop();
   }
 };
 
@@ -964,8 +990,7 @@ document.addEventListener("touchend",(e)=>{
 announcementBox.style.display = "none";
 
 // 🔥 STOP AUDIO
-announcementAudio.pause();
-announcementAudio.currentTime = 0;
+stopAnnouncementLoop();
 isPlaying = false;
 announceBtn.innerText = "🔊 Play Announcement";
   }
@@ -974,4 +999,3 @@ announceBtn.innerText = "🔊 Play Announcement";
 </script>
 </body>
 </html>
-
