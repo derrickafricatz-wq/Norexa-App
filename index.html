@@ -453,6 +453,36 @@ Install App
   </div>
 </div>
 
+<div id="updateBox" style="
+  position:fixed;
+  top:80px;
+  right:20px;
+  background:#00ffff;
+  color:black;
+  padding:15px;
+  border-radius:12px;
+  display:none;
+  z-index:200;
+  font-family:'Russo One';
+  max-width:250px;
+">
+
+  <div id="updateText"></div>
+
+  <button onclick="applyUpdate()" style="
+    margin-top:10px;
+    padding:8px;
+    border:none;
+    background:black;
+    color:#00ffff;
+    border-radius:8px;
+    width:100%;
+  ">
+    Update Now
+  </button>
+
+</div>
+
 <script>
 /* ================= FULLSCREEN KIOSK ================= */
 function goFullScreen(){
@@ -520,7 +550,7 @@ async function loadWeather(){
 loadWeather(); setInterval(loadWeather,600000);
 
 /* ================= ADS ================= */
-const adImages=["https://i.imgur.com/E4r5jlg.png","https://i.imgur.com/dFw0tik.png"];
+const adImages=["https://i.imgur.com/Vq3ksCE.png","https://i.imgur.com/dFw0tik.png"];
 adImages.forEach(src=>{new Image().src=src;});
 let adIndex=0, adInterval, currentLesson=null;
 const lessonAds={1:["https://i.imgur.com/UPgPdWT.jpeg","https://i.imgur.com/HdKedqJ.jpeg"],
@@ -653,6 +683,51 @@ next.onclick=()=>playVideo(index+1);
 rew.onclick=()=>video.currentTime-=10;
 ff.onclick=()=>video.currentTime+=10;
 playPause.onclick=()=>video.paused?video.play():video.pause();
+
+let currentVersion = localStorage.getItem("app_version") || "1.0.0";
+
+async function checkForUpdate() {
+  try {
+    const res = await fetch("https://derrickafricatz-wq.github.io/AFYA-CARE/version.json?time=" + Date.now());
+    const data = await res.json();
+
+    if (data.version !== currentVersion) {
+      showUpdateNotification(data.message, data.force);
+
+      currentVersion = data.version;
+      localStorage.setItem("app_version", data.version);
+    }
+  } catch (err) {
+    console.log("Update check failed");
+  }
+}
+
+// check every 1 minute
+setInterval(checkForUpdate, 60000);
+
+
+function showUpdateNotification(msg, force) {
+  const box = document.getElementById("updateBox");
+  const text = document.getElementById("updateText");
+
+  text.innerText = msg;
+  box.style.display = "block";
+
+  // 🔊 BEEP SOUND ALERT
+  const beep = new Audio("https://www.soundjay.com/buttons/sounds/button-3.mp3");
+  beep.play().catch(()=>{});
+
+  // 🔥 FORCE UPDATE (AUTO RELOAD)
+  if (force) {
+    setTimeout(() => {
+      location.reload();
+    }, 5000);
+  }
+}
+
+function applyUpdate() {
+  location.reload();
+}
 
 /* ================= KEYPAD ================= */
 const display=document.getElementById("display");
