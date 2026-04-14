@@ -17,7 +17,7 @@ hiv: {
     "📖 Kinga na Kuzuia / Prevention",
     "Tumia kondomu wakati wa ngono, epuka kutumia sindano zisizo safi, hakikisha damu ni salama.",
 
-    "📖 Matibabu / Treat me please",
+    "📖 Matibabu / Treatment",
     "Matibabu ya ARV husaidia kuishi maisha marefu na yenye afya.",
 
     "🌐Vyanzo / References",
