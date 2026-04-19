@@ -46,18 +46,6 @@ html, body {
   z-index: 10;
 }
 
-/* WEATHER */
-#weatherBox {
-  position: fixed;
-  top: 10px;
-  right: 20px;
-  background: rgba(0,0,0,0.6);
-  padding: 10px;
-  border-radius: 18px;
-  z-index: 10;
-  line-height: 1.5;
-}
-
 /* ADS */
 #adImage {
   position: fixed;
@@ -374,7 +362,20 @@ Install App
 <video id="brandVideo" autoplay muted playsinline></video>
 
 <div id="clockBox"></div>
-<div id="weatherBox">Loading...</div>
+<button id="topGuideBtn" style="
+  position:fixed;
+  top:10px;
+  right:20px;
+  padding:10px 14px;
+  border:none;
+  border-radius:10px;
+  background:#00ffff;
+  color:black;
+  font-size:16px;
+  z-index:200;
+">
+⚙️ Guide
+</button>
 <div id="lessonLabel">powered by deka</div>
 
 <div id="adImage"><img id="adImg"></div>
@@ -534,25 +535,6 @@ document.body.addEventListener("click", () => {
 const clockBox = document.getElementById("clockBox");
 setInterval(()=>clockBox.innerText=new Date().toLocaleTimeString(),1000);
 
-/* ================= WEATHER ================= */
-const cities=["Arusha",];
-async function loadWeather(){
-  let html="<b>Weather TZ</b><br>";
-  for(const city of cities){
-    try{
-      let geo=await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${city}`);
-      let g=await geo.json();
-      if(!g.results){ html+=city+": --<br>"; continue; }
-      let {latitude,longitude}=g.results[0];
-      let w=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true`);
-      let d=await w.json();
-      html+=city+": "+Math.round(d.current_weather.temperature)+"°C<br>";
-    }catch{ html+=city+": --<br>"; }
-  }
-  weatherBox.innerHTML=html;
-}
-loadWeather(); setInterval(loadWeather,600000);
-
 /* ================= ADS ================= */
 const adImages=["https://i.imgur.com/5g1NxWl.png","https://i.imgur.com/dFw0tik.png"];
 adImages.forEach(src=>{new Image().src=src;});
@@ -658,6 +640,13 @@ smartPanel.addEventListener("click",resetTimer);
 const openControls=document.getElementById("openControls");
 const openKeypad=document.getElementById("openKeypad");
 const openHealth=document.getElementById("openHealth");
+const topGuideBtn = document.getElementById("topGuideBtn");
+
+topGuideBtn.onclick = () => {
+  guideOverlay.style.display = "flex";
+  guideIndex = 0;
+  guideText.innerText = guideSteps[0].text;
+};
 const openAnnouncement = document.getElementById("openAnnouncement");
 const announcementBox = document.getElementById("announcementBox");
 const announceBtn = document.getElementById("announceBtn");
