@@ -353,7 +353,6 @@ Install App
 </div>
 
 <script src="health-data.js"></script>
-
 <script src="lesson-data.js"></script>
 
 <video id="brandVideo" autoplay muted playsinline></video>
@@ -435,7 +434,20 @@ function goFullScreen(){
   else if(el.webkitRequestFullscreen) el.webkitRequestFullscreen();
   else if(el.msRequestFullscreen) el.msRequestFullscreen();
 }
-document.body.addEventListener("click", goF
+document.body.addEventListener("click", goFullScreen, {once:true});
+
+const guideSteps = [
+  {text: "This is the video area. Tap to unmute and play videos."},
+  {text: "Swipe down to hide panels, swipe up to reveal the smart toggle."},
+  {text: "Press '🖱️Controls' to play/pause, rewind, or fast forward videos."},
+  {text: "Press '⌨️Keyboard' to enter a lesson number."},
+  {text: "Press '📚 Health' to explore health lessons."},
+  {text: "Inside a lesson, click any line or image to mark it for printing."},
+  {text: "Press the '🖨 PRINT' button to print only the marked parts."},
+  {text: "Press the '🔃 ROTATE' button to manage landscape/portrait."},
+{text: "Swipe up/down or use the top buttons to hide/show topics."},
+  {text: "That's it! Enjoy The Journey."}
+];
 
 let guideIndex = 0;
 const guideOverlay = document.getElementById("guideOverlay");
@@ -450,21 +462,7 @@ nextGuide.onclick = () => {
     guideText.innerText = guideSteps[guideIndex].text;
   }
 };
-const guideSteps = [
-  {text: "Hili ni eneo la video. Gusa skrini ili kuanza sauti."},
-  {text: "Telezesha juu kuonyesha menu, telezesha chini kuficha."},
-  {text: "Bonyeza '🖱️ Controls' kucheza, kusimamisha au kurudisha video."},
-  {text: "Bonyeza '⌨️ Keyboard' kuingiza namba ya somo."},
-  {text: "Bonyeza '📚 Health' kujifunza masomo ya afya."},
-  {text: "Ndani ya somo, gusa maandishi au picha kuchagua sehemu."},
-  {text: "Bonyeza '🖨 PRINT' kuchapisha sehemu ulizochagua."},
-  {text: "Bonyeza '🔃 ROTATE' kubadilisha mwelekeo wa skrini."},
-  {text: "Bonyeza '⏯ PLAY/PAUSE' kusimamisha au kuendelea maandishi."},
-  {text: "Bonyeza '↩️ BACK' kurudi kwenye mada au tumia ❎ kutoka kabisa."},
-  {text: "Telezesha juu/chini au tumia vitufe kudhibiti."},
-  {text: "Utajulishwa kuhusu taarifa mpya kupitia notification."},
-  {text: "Karibu utumie Afya Care."}
-];
+
 const settingsBtn = document.getElementById("settingsBtn");
 
 settingsBtn.onclick = () => {
