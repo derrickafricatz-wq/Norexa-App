@@ -43,25 +43,32 @@ html, body {
   z-index: 10;
 }
 
-/* ADS */
 #adImage {
   position: fixed;
-  top: 0;
-  right: -100%;
-  width: 50%;
+  inset: 0;
+  width: 100%;
   height: 100%;
-  background: black;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(10px);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 6;
-  transition: right 0.6s ease;
+  z-index: 999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.6s ease;
+}
+
+#adImage.show {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 #adImg {
-  width: 100%;
-  height: 100%;
+  width: 90%;
+  height: 90%;
   object-fit: contain;
+  border-radius: 16px;
 }
 
 /* LESSON FADE */
@@ -535,8 +542,8 @@ function startLessonAds(lessonId){
   function showLessonAd(){
     const ads=lessonAds[lessonId];
     adImg.style.opacity="1"; adImg.src=ads[lessonAdIndex];
-    setTimeout(()=>adImage.style.right="0",50);
-    setTimeout(()=>adImage.style.right="-100%",8000);
+    adImage.classList.add("show");
+setTimeout(()=>adImage.classList.remove("show"), 8000);
     lessonAdIndex=(lessonAdIndex+1)%ads.length;
   }
   showLessonAd();
