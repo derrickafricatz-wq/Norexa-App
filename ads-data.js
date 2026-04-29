@@ -1,0 +1,1 @@
+const adImages=["https://i.imgur.com/Vq3ksCE.png","https://i.imgur.com/dFw0tik.png","https://i.imgur.com/ZFBIpe8.png"];
