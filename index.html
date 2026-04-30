@@ -253,7 +253,7 @@ html, body {
 #splash img {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* use "cover" if you want it to fill fully */
+  object-fit: contain; /* use "cover" if you want it to fill fully */
 }
 
 /* HEALTH UI */
@@ -905,38 +905,57 @@ c.appendChild(lesson);
 
     window.speechSynthesis.cancel();
 
-    const utter = new SpeechSynthesisUtterance(text);
+    // ✂️ Split text into smaller natural chunks (like humans speak)
+    const chunks = text
+        .replace(/([.,!?])/g, "$1|") // pause at punctuation
+        .split("|")
+        .filter(t => t.trim().length > 0);
 
-    // Swahili Kenya
-    utter.lang = "sw-KE";
+    let index = 0;
 
-    // human tuning
-    utter.rate = 0.82;
-    utter.pitch = 0.75;
-    utter.volume = 1;
+    function speakNext(){
+        if(index >= chunks.length){
+            startScrolling(); // resume scroll after speaking
+            return;
+        }
 
-    let voices = window.speechSynthesis.getVoices();
+        const utter = new SpeechSynthesisUtterance(chunks[index].trim());
 
-    const preferred =
-        voices.find(v => v.lang.includes("sw")) ||
-        voices.find(v => v.lang.includes("en-GB")) ||
-        voices.find(v => v.lang.includes("en-US")) ||
-        voices[0];
+        // 🌍 Language (Swahili + fallback)
+        utter.lang = "sw-TZ";
 
-    if(preferred){
-        utter.voice = preferred;
+        // 🎯 HUMAN SETTINGS (tuned)
+        utter.rate = 0.9;     // slightly faster (more natural)
+        utter.pitch = 0.95;   // less robotic
+        utter.volume = 1;
+
+        let voices = window.speechSynthesis.getVoices();
+
+        const preferred =
+            voices.find(v => v.lang.includes("sw")) ||
+            voices.find(v => v.lang.includes("en-GB")) ||
+            voices.find(v => v.name.toLowerCase().includes("female")) ||
+            voices[0];
+
+        if(preferred){
+            utter.voice = preferred;
+        }
+
+        // ⏸ Pause scrolling while speaking
+        utter.onstart = () => {
+            clearInterval(scrollInterval);
+        };
+
+        // 🔄 Continue to next chunk
+        utter.onend = () => {
+            index++;
+            setTimeout(speakNext, 200); // small natural pause
+        };
+
+        window.speechSynthesis.speak(utter);
     }
 
-    // ONLY affect HEALTH scroll (not main video)
-    utter.onstart = () => {
-        clearInterval(scrollInterval);
-    };
-
-    utter.onend = () => {
-        startScrolling();
-    };
-
-    window.speechSynthesis.speak(utter);
+    speakNext();
 }
 
 function toggleTopics(toggleBtn){
