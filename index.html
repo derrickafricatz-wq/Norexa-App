@@ -630,6 +630,8 @@ if ("serviceWorker" in navigator) {
     .catch(err => console.log("SW error", err));
 }
 
+checkLicense();
+
 /* SMART SYSTEM */
 const smartToggle=document.getElementById("smartToggle");
 const smartPanel=document.getElementById("smartPanel");
@@ -729,6 +731,8 @@ playPause.onclick=()=>video.paused?video.play():video.pause();
 
 let currentVersion = localStorage.getItem("app_version") || "1.0.0";
 
+let licenseData = null;
+
 async function checkForUpdate() {
   try {
     const res = await fetch("https://derrickafricatz-wq.github.io/AFYA-CARE/version.json?time=" + Date.now());
@@ -770,6 +774,63 @@ function showUpdateNotification(msg, force) {
 
 function applyUpdate() {
   location.reload();
+}
+
+async function checkLicense(){
+
+  try{
+
+    const res = await fetch("license.json?time=" + Date.now());
+    const data = await res.json();
+
+    licenseData = data;
+
+    console.log("LICENSE:", data);
+
+    // ❌ BLOCK if invalid
+    if(!data.active){
+      document.body.innerHTML = `
+        <div style="
+          position:fixed;
+          inset:0;
+          background:black;
+          color:#00ffff;
+          display:flex;
+          justify-content:center;
+          align-items:center;
+          font-size:24px;
+          font-family:Arial;
+          text-align:center;
+          padding:20px;
+        ">
+          ❌ ACCESS BLOCKED<br><br>
+          License not active
+        </div>
+      `;
+      return;
+    }
+
+  }catch(err){
+
+    console.log("License check failed");
+
+    document.body.innerHTML = `
+      <div style="
+        position:fixed;
+        inset:0;
+        background:black;
+        color:red;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        font-size:20px;
+        text-align:center;
+        padding:20px;
+      ">
+        ⚠️ Cannot verify license
+      </div>
+    `;
+  }
 }
 
 /* ================= KEYPAD ================= */
