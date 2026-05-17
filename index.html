@@ -318,46 +318,6 @@ html, body {
 
 <body>
 
-<!-- SUBSCRIPTION LOCK SCREEN -->
-<div id="subGate" style="
-position:fixed;
-inset:0;
-background:black;
-color:#00ffff;
-z-index:9999;
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:center;
-font-family:'Russo One';
-text-align:center;
-padding:20px;
-">
-
-<h2>AFYA CARE ACCESS</h2>
-
-<p>Unlock system with subscription</p>
-
-<div style="margin:10px 0;font-size:18px;">
-📱 PAY VIA M-PESA<br>
-<strong>+255 742 097 868</strong>
-</div>
-
-<button onclick="fakePay()" style="
-padding:12px 20px;
-border:none;
-border-radius:10px;
-background:#00ffff;
-color:black;
-font-size:18px;
-">
-I HAVE PAID
-</button>
-
-<div id="countdown" style="margin-top:15px;"></div>
-
-</div>
-
 <button id="installBtn" style="
   position:fixed;
   bottom:20px;
@@ -519,83 +479,6 @@ Install App
 </div>
 
 <script>
-/* ================= SUBSCRIPTION SYSTEM ================= */
-
-const SUB_TIME = 3 * 60 * 1000; // 3 minutes
-
-function generateToken(){
-  return "AFYA-" + Math.random().toString(36).substring(2,10) + "-" + Date.now();
-}
-
-function fakePay(){
-  const token = generateToken();
-  const expiry = Date.now() + SUB_TIME;
-
-  localStorage.setItem("sub_token", token);
-  localStorage.setItem("sub_expiry", expiry);
-
-  document.getElementById("subGate").style.display = "none";
-
-  startCountdown();
-  checkSubscription();
-}
-
-/* COUNTDOWN */
-let subTimer;
-
-function startCountdown(){
-  clearInterval(subTimer);
-
-  subTimer = setInterval(()=>{
-    let expiry = localStorage.getItem("sub_expiry");
-
-    if(!expiry){
-      lockApp();
-      return;
-    }
-
-    let remaining = expiry - Date.now();
-
-    if(remaining <= 0){
-      lockApp();
-      return;
-    }
-
-    document.getElementById("countdown").innerText =
-      "Session expires in: " + Math.floor(remaining/1000) + "s";
-
-  },1000);
-}
-
-/* LOCK SYSTEM */
-function lockApp(){
-  localStorage.removeItem("sub_token");
-  localStorage.removeItem("sub_expiry");
-
-  document.getElementById("subGate").style.display = "flex";
-  document.getElementById("countdown").innerText = "SESSION EXPIRED";
-}
-
-/* CHECK ON LOAD */
-function checkSubscription(){
-  let expiry = localStorage.getItem("sub_expiry");
-
-  if(!expiry){
-    lockApp();
-    return;
-  }
-
-  if(Date.now() > expiry){
-    lockApp();
-  } else {
-    document.getElementById("subGate").style.display = "none";
-    startCountdown();
-  }
-}
-
-/* AUTO RUN WHEN APP STARTS */
-checkSubscription();
-
 /* ================= FULLSCREEN KIOSK ================= */
 function goFullScreen(){
   const el=document.documentElement;
