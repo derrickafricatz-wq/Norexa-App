@@ -1,3 +1,5 @@
 let lessons={
-1:["https://derrickafricatz-wq.github.io/AFYA-CARE/videos/wow.mp4"],
-2:["https://derrickafricatz-wq.github.io/AFYA-CARE/videos/usafi.mp4"]};
+1:["https://derrickafricatz-wq.github.io/AFYA-CARE/videos/choo.mp4"],
+2:["https://derrickafricatz-wq.github.io/AFYA-CARE/videos/usafi.mp4"],
+3:["https://derrickafricatz-wq.github.io/AFYA-CARE/videos/chanjo.mp4"],
+10:["https://derrickafricatz-wq.github.io/AFYA-CARE/videos/meno.mp4"]};
