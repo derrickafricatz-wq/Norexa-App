@@ -1,4 +1,4 @@
-const CACHE_NAME = "afya-care-v1";
+const CACHE_NAME = "afya-care-v2";
 
 const urlsToCache = [
   "/AFYA-CARE/",
