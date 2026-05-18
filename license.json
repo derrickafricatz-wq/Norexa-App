@@ -1,6 +1,10 @@
+
 {
   "active": false,
-  "hospital": "Mount Meru Hospital",
-  "expires": "2026-12-01",
-  "plan": "premium"
+
+  "smartLockedTitle": "AFYA CARE PROTECTED",
+
+  "smartLockedWord": "secured by deka.",
+
+  "smartLockedFooter": "Please contact administrator to continue."
 }
