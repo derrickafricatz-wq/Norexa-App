@@ -6,7 +6,7 @@ const urlsToCache = [
 
   // VIDEOS
   "/AFYA-CARE/videos/choo.mp4",
-  "/AFYA-CARE/videos/mikono safi.mp4",
+  "/AFYA-CARE/videos/usafi.mp4",
   "/AFYA-CARE/videos/chanjo.mp4",
   "/AFYA-CARE/videos/meno.mp4"
 
