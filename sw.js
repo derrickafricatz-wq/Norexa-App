@@ -12,7 +12,7 @@ const urlsToCache = [
 
   // IMAGES
   "/AFYA-CARE/images/ad3.png",
-  "/AFYA-CARE/images/one.png"
+  "/AFYA-CARE/images/one.jpg"
 ];
 
 self.addEventListener("install", (event) => {
