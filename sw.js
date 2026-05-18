@@ -5,10 +5,14 @@ const urlsToCache = [
   "/AFYA-CARE/index.html",
 
   // VIDEOS
-  "/AFYA-CARE/videos/wow.mp4",
+  "/AFYA-CARE/videos/choo.mp4",
+  "/AFYA-CARE/videos/mikono safi.mp4",
+  "/AFYA-CARE/videos/chanjo.mp4",
+  "/AFYA-CARE/videos/meno.mp4"
 
   // IMAGES
-  "/AFYA-CARE/images/ad3.png"
+  "/AFYA-CARE/images/ad3.png",
+  "/AFYA-CARE/images/one.png"
 ];
 
 self.addEventListener("install", (event) => {
