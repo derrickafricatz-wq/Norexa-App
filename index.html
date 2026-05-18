@@ -787,28 +787,56 @@ async function checkLicense(){
 
     console.log("LICENSE:", data);
 
-    // ❌ BLOCK if invalid
-    if(!data.active){
-      document.body.innerHTML = `
-        <div style="
-          position:fixed;
-          inset:0;
-          background:black;
-          color:#00ffff;
-          display:flex;
-          justify-content:center;
-          align-items:center;
-          font-size:24px;
-          font-family:Arial;
-          text-align:center;
-          padding:20px;
-        ">
-          ❌ ACCESS BLOCKED<br><br>
-          License not active
-        </div>
-      `;
-      return;
-    }
+    // // ❌ BLOCK if invalid
+if(!data.active){
+
+  document.body.innerHTML = `
+  
+    <div style="
+      position:fixed;
+      inset:0;
+      background:black;
+      color:#00ffff;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      text-align:center;
+      padding:20px;
+      font-family:'Russo One', Arial;
+    ">
+
+      <div style="
+        font-size:34px;
+        margin-bottom:15px;
+        letter-spacing:2px;
+      ">
+        ${data.smartLockedTitle || "AFYA CARE PROTECTED MODE"}
+      </div>
+
+      <div style="
+        font-size:20px;
+        opacity:0.9;
+        max-width:600px;
+        line-height:1.7;
+      ">
+        ${data.smartLockedWord || "Your session is secured by DEKA Health System"}
+      </div>
+
+      <div style="
+        margin-top:25px;
+        font-size:14px;
+        opacity:0.6;
+      ">
+        ${data.smartLockedFooter || "Please activate to continue learning"}
+      </div>
+
+    </div>
+
+  `;
+
+  return;
+}
 
   }catch(err){
 
