@@ -31,6 +31,21 @@ html, body {
   z-index: 0;
 }
 
+#floatingDownloadBtn{
+  z-index:99999 !important;
+
+  position:fixed !important;
+
+  display:flex !important;
+  align-items:center;
+  justify-content:center;
+
+  opacity:1 !important;
+  visibility:visible !important;
+
+  pointer-events:auto !important;
+}
+
 /* CLOCK */
 #clockBox {
   position: fixed;
@@ -155,7 +170,7 @@ html, body {
   bottom: 0;
   width: 100%;
   background: black;
-  z-index: 1;
+  z-index: 0;
   padding: 8px 0;
 }
 
@@ -349,20 +364,33 @@ Install App
 <script src="hints.js"></script>
 
 <video id="brandVideo" autoplay muted playsinline></video>
+
 <button id="floatingDownloadBtn"
 style="
 position:fixed;
 right:20px;
 bottom:90px;
-z-index:999;
+z-index:99999;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
 padding:14px 18px;
 border:none;
 border-radius:14px;
+
 background:#00ffff;
 color:black;
+
 font-weight:bold;
 font-size:16px;
+
 box-shadow:0 0 15px rgba(0,255,255,0.5);
+
+pointer-events:auto;
+opacity:1;
+visibility:visible;
 ">
 ⬇ DOWNLOAD
 </button>
