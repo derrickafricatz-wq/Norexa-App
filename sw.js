@@ -1,28 +1,18 @@
-const CACHE_NAME = "afya-care-v6-smart";
+const CACHE_NAME = "afya-care-v7";
 
-/* ONLY CORE FILES PRE-CACHED */
-const CORE_FILES = [
+const APP_FILES = [
   "/AFYA-CARE/",
   "/AFYA-CARE/index.html",
-
-  // IMAGES
   "/AFYA-CARE/images/ad3.png",
   "/AFYA-CARE/images/one.jpg"
 ];
 
-/* INSTALL */
 self.addEventListener("install", (event) => {
 
   event.waitUntil(
 
     caches.open(CACHE_NAME)
-      .then((cache) => {
-
-        console.log("Core cache ready");
-
-        return cache.addAll(CORE_FILES);
-
-      })
+      .then((cache) => cache.addAll(APP_FILES))
 
   );
 
@@ -30,7 +20,6 @@ self.addEventListener("install", (event) => {
 
 });
 
-/* ACTIVATE */
 self.addEventListener("activate", (event) => {
 
   event.waitUntil(
@@ -57,51 +46,16 @@ self.addEventListener("activate", (event) => {
 
 });
 
-/* SMART FETCH */
 self.addEventListener("fetch", (event) => {
-
-  const req = event.request;
 
   event.respondWith(
 
-    caches.match(req).then((cached) => {
+    caches.match(event.request)
+      .then((cached) => {
 
-      // RETURN CACHE FIRST
-      if (cached) {
-        return cached;
-      }
+        return cached || fetch(event.request);
 
-      // FETCH FROM INTERNET
-      return fetch(req).then((response) => {
-
-        // CACHE MP4 + IMAGES DYNAMICALLY
-        if (
-          req.url.includes(".mp4") ||
-          req.url.includes(".png") ||
-          req.url.includes(".jpg") ||
-          req.url.includes(".jpeg")
-        ) {
-
-          const responseClone = response.clone();
-
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put(req, responseClone);
-          });
-
-        }
-
-        return response;
-
-      }).catch(() => {
-
-        // OFFLINE VIDEO FALLBACK
-        if (req.destination === "video") {
-          return caches.match("/AFYA-CARE/videos/choo.mp4");
-        }
-
-      });
-
-    })
+      })
 
   );
 
