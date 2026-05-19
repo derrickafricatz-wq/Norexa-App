@@ -386,6 +386,9 @@ Install App
 
 <div id="smartPanel">
   <button class="smart-item" id="openControls">⌨ SYSTEM KEYPAD</button>
+  <button class="smart-item" id="openDownloads">
+  ⬇ DOWNLOADS
+</button>
   <button class="smart-item" id="openHealth">
 
   <div id="healthMain">
@@ -409,6 +412,7 @@ Install App
 
 <button class="ctrl-btn" id="next">⏭</button>
 <button class="ctrl-btn" id="ff">⏩</button>
+<button class="ctrl-btn" id="downloadBtn">⬇</button>
 
 <div></div>
 
@@ -714,6 +718,7 @@ smartPanel.addEventListener("click",resetTimer);
 /* ================= CONTROLS ================= */
 const openControls=document.getElementById("openControls");
 const openHealth=document.getElementById("openHealth");
+const openDownloads = document.getElementById("openDownloads");
 
 const controls=document.getElementById("controls");
 const prev=document.getElementById("prev");
@@ -722,12 +727,36 @@ const rew=document.getElementById("rew");
 const ff=document.getElementById("ff");
 const playPause=document.getElementById("playPause");
 
+const downloadBtn = document.getElementById("downloadBtn");
+
 openControls.onclick=()=>controls.classList.toggle("show");
 prev.onclick=()=>playVideo(index-1);
 next.onclick=()=>playVideo(index+1);
 rew.onclick=()=>video.currentTime-=10;
 ff.onclick=()=>video.currentTime+=10;
 playPause.onclick=()=>video.paused?video.play():video.pause();
+
+downloadBtn.onclick = async () => {
+
+  try {
+
+    const currentVideo = playlist[index];
+
+    const cache = await caches.open("afya-downloads");
+
+    await cache.add(currentVideo);
+
+    alert("Video downloaded for offline use!");
+
+  } catch(err) {
+
+    alert("Download failed");
+
+    console.log(err);
+
+  }
+
+};
 
 let currentVersion = localStorage.getItem("app_version") || "1.0.0";
 
@@ -1132,6 +1161,108 @@ function toggleScroll(){
 }
 
 } // end of showHealthyClass
+
+openDownloads.onclick = async () => {
+
+  const cache = await caches.open("afya-downloads");
+
+  const requests = await cache.keys();
+
+  // REMOVE OLD BOX
+  const oldBox = document.getElementById("downloadsBox");
+  if(oldBox) oldBox.remove();
+
+  // CREATE BOX
+  const box = document.createElement("div");
+
+  box.id = "downloadsBox";
+
+  box.style = `
+    position:fixed;
+    inset:0;
+    background:black;
+    color:#00ffff;
+    z-index:9999;
+    overflow:auto;
+    padding:20px;
+    font-family:Arial;
+  `;
+
+  // TITLE
+  box.innerHTML = `
+    <h2>⬇ Downloaded Videos</h2>
+  `;
+
+  // CLOSE BUTTON
+  const closeBtn = document.createElement("button");
+
+  closeBtn.innerText = "✖ CLOSE";
+
+  closeBtn.style = `
+    padding:10px;
+    margin-bottom:20px;
+    background:#00ffff;
+    border:none;
+  `;
+
+  closeBtn.onclick = () => box.remove();
+
+  box.appendChild(closeBtn);
+
+  // NO DOWNLOADS
+  if(requests.length === 0){
+
+    const empty = document.createElement("div");
+
+    empty.innerText = "No downloaded videos yet.";
+
+    box.appendChild(empty);
+
+  }
+
+  // VIDEO LIST
+  requests.forEach((req) => {
+
+    const btn = document.createElement("button");
+
+    btn.innerText = req.url.split("/").pop();
+
+    btn.style = `
+      display:block;
+      width:100%;
+      margin:10px 0;
+      padding:15px;
+      background:#00ffff;
+      color:black;
+      border:none;
+      border-radius:10px;
+      font-size:18px;
+    `;
+
+    // PLAY OFFLINE VIDEO
+    btn.onclick = async () => {
+
+      const response = await cache.match(req);
+
+      const blob = await response.blob();
+
+      const offlineURL = URL.createObjectURL(blob);
+
+      video.src = offlineURL;
+
+      video.play();
+
+      box.remove();
+
+    };
+
+    box.appendChild(btn);
+
+  });
+
+  document.body.appendChild(box);
+
+};
 
 
 /* ================= GLOBAL GESTURES ================= */
