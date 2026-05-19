@@ -350,6 +350,51 @@ Install App
 
 <video id="brandVideo" autoplay muted playsinline></video>
 
+<button onclick="document.getElementById('controls').classList.add('show')"
+style="
+position:fixed;
+bottom:20px;
+left:20px;
+z-index:9999;
+padding:10px;
+background:#00ffff;
+border:none;
+border-radius:10px;
+">
+OPEN CONTROLS
+</button>
+
+<button onclick="downloadCurrentVideo()"
+style="
+position:fixed;
+bottom:80px;
+right:20px;
+z-index:9999;
+padding:10px;
+background:#00ffff;
+border:none;
+border-radius:10px;
+font-weight:bold;
+">
+⬇ DOWNLOAD
+</button>
+
+<button onclick="openDownloads()"
+style="
+position:fixed;
+bottom:140px;
+right:20px;
+z-index:9999;
+padding:10px;
+background:black;
+color:#00ffff;
+border:2px solid #00ffff;
+border-radius:10px;
+font-weight:bold;
+">
+📂 LIBRARY
+</button>
+
 <div id="clockBox"></div>
 <button id="settingsBtn" style="
   position:fixed;
@@ -729,7 +774,9 @@ const playPause=document.getElementById("playPause");
 
 const downloadBtn = document.getElementById("downloadBtn");
 
-openControls.onclick=()=>controls.classList.toggle("show");
+openControls.onclick = () => {
+  controls.classList.add("show");
+};
 prev.onclick=()=>playVideo(index-1);
 next.onclick=()=>playVideo(index+1);
 rew.onclick=()=>video.currentTime-=10;
