@@ -1,4 +1,4 @@
-const CACHE_NAME = "afya-care-v3";
+const CACHE_NAME = "afya-care-v5";
 
 const urlsToCache = [
   "/AFYA-CARE/",
@@ -8,7 +8,7 @@ const urlsToCache = [
   "/AFYA-CARE/videos/choo.mp4",
   "/AFYA-CARE/videos/usafi.mp4",
   "/AFYA-CARE/videos/chanjo.mp4",
-  "/AFYA-CARE/videos/meno.mp4"
+  "/AFYA-CARE/videos/meno.mp4",
 
   // IMAGES
   "/AFYA-CARE/images/ad3.png",
@@ -21,11 +21,42 @@ self.addEventListener("install", (event) => {
 
     caches.open(CACHE_NAME)
       .then((cache) => {
+
         console.log("Caching files...");
+
         return cache.addAll(urlsToCache);
+
       })
 
   );
+
+  self.skipWaiting();
+
+});
+
+self.addEventListener("activate", (event) => {
+
+  event.waitUntil(
+
+    caches.keys().then((keys) => {
+
+      return Promise.all(
+
+        keys.map((key) => {
+
+          if (key !== CACHE_NAME) {
+            return caches.delete(key);
+          }
+
+        })
+
+      );
+
+    })
+
+  );
+
+  self.clients.claim();
 
 });
 
@@ -36,12 +67,12 @@ self.addEventListener("fetch", (event) => {
     caches.match(event.request)
       .then((response) => {
 
-        // Return cached version if found
-        if(response){
+        // Return cache if found
+        if (response) {
           return response;
         }
 
-        // Otherwise fetch from internet
+        // Otherwise fetch online
         return fetch(event.request);
 
       })
