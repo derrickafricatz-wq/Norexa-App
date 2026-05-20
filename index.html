@@ -31,21 +31,6 @@ html, body {
   z-index: 0;
 }
 
-#floatingDownloadBtn{
-  z-index:99999 !important;
-
-  position:fixed !important;
-
-  display:flex !important;
-  align-items:center;
-  justify-content:center;
-
-  opacity:1 !important;
-  visibility:visible !important;
-
-  pointer-events:auto !important;
-}
-
 /* CLOCK */
 #clockBox {
   position: fixed;
@@ -56,13 +41,6 @@ html, body {
   padding: 10px 18px;
   border-radius: 10px;
   z-index: 10;
-}
-
-#healthHint{
-  color:#00ffff;
-  font-size:11px;
-  letter-spacing:1px;
-  opacity:0.9;
 }
 
 /* ADS */
@@ -170,7 +148,7 @@ html, body {
   bottom: 0;
   width: 100%;
   background: black;
-  z-index: 0;
+  z-index: 10;
   padding: 8px 0;
 }
 
@@ -204,42 +182,78 @@ html, body {
   z-index: 5;
 }
 
+/* CONTROLS */
 #controls {
   position: fixed;
   bottom: 140px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 95%;
-  max-width: 420px;
-  background: rgba(0,0,0,0.88);
+  left: 20px;
+  background: rgba(0,0,0,0.7);
   border-radius: 20px;
   opacity: 0;
   pointer-events: none;
-  z-index: 50;
-  max-height: 70vh;
-  overflow-y: auto;
+  z-index: 50; /* 🔥 higher than smartToggle */
 }
-
 #controls.show {
   opacity:1;
   pointer-events:auto;
 }
-
 #controlGrid {
   display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:12px;
-  padding:15px;
+  grid-template-columns:repeat(5,1fr);
+  gap:10px;
+  padding:10px;
 }
-
 .ctrl-btn {
-  width:100%;
-  height:55px;
-  border-radius:16px;
+  width:50px;
+  height:50px;
+  border-radius:50%;
   background:#00ffff;
   border:none;
-  font-size:20px;
-  font-weight:bold;
+}
+
+/* KEYPAD */
+#keypad {
+  position:fixed;
+  bottom:140px;
+  left:50%;
+  transform:translateX(-50%);
+  background:black;
+  padding:10px;
+  border-radius:15px;
+  display:none;
+  z-index:40;
+}
+#display {
+  width:100%;
+  margin-bottom:10px;
+  padding:10px;
+}
+#keys {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+}
+#keys button {
+  height:50px;
+}
+
+#splash {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+#splash img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* use "cover" if you want it to fill fully */
 }
 
 /* HEALTH UI */
@@ -361,39 +375,8 @@ Install App
 <script src="lesson-data.js"></script>
 <script src="ads-data.js"></script>
 <script src="special-ads.js"></script>
-<script src="hints.js"></script>
 
 <video id="brandVideo" autoplay muted playsinline></video>
-
-<button id="floatingDownloadBtn"
-style="
-position:fixed;
-right:20px;
-bottom:90px;
-z-index:99999;
-
-display:flex;
-align-items:center;
-justify-content:center;
-
-padding:14px 18px;
-border:none;
-border-radius:14px;
-
-background:#00ffff;
-color:black;
-
-font-weight:bold;
-font-size:16px;
-
-box-shadow:0 0 15px rgba(0,255,255,0.5);
-
-pointer-events:auto;
-opacity:1;
-visibility:visible;
-">
-⬇ DOWNLOAD
-</button>
 
 <div id="clockBox"></div>
 <button id="settingsBtn" style="
@@ -430,67 +413,38 @@ visibility:visible;
 </button>
 
 <div id="smartPanel">
-  <button class="smart-item" id="openControls">⌨ SYSTEM KEYPAD</button>
-  <button class="smart-item" id="openHealth">
+  <button class="smart-item" id="openControls">🖱️ Controls</button>
+  <button class="smart-item" id="openKeypad">⌨️ Keyboard</button>
+  <button class="smart-item" id="openHealth">📚 Health</button>
+</div>
 
-  <div id="healthMain">
-    LEARN DISEASES
+<div id="keypad">
+  <input id="display" type="number">
+  <div id="keys">
+    <button onclick="pressKey(1)">1</button>
+    <button onclick="pressKey(2)">2</button>
+    <button onclick="pressKey(3)">3</button>
+    <button onclick="pressKey(4)">4</button>
+    <button onclick="pressKey(5)">5</button>
+    <button onclick="pressKey(6)">6</button>
+    <button onclick="pressKey(7)">7</button>
+    <button onclick="pressKey(8)">8</button>
+    <button onclick="pressKey(9)">9</button>
+    <button onclick="clearInput()">C</button>
+    <button onclick="pressKey(0)">0</button>
+    <button onclick="submitLesson()">OK</button>
+    <button onclick="refreshLessons()">↻</button>
   </div>
-
-  <small>
-    TWENDE ZETU DARASANI
-  </small>
-
-</button>
 </div>
 
 <div id="controls">
   <div id="controlGrid">
-
-  <!-- VIDEO CONTROLS -->
-<button class="ctrl-btn" id="prev">⏮</button>
-<button class="ctrl-btn" id="rew">⏪</button>
-<button class="ctrl-btn" id="playPause">⏯</button>
-
-<button class="ctrl-btn" id="next">⏭</button>
-<button class="ctrl-btn" id="ff">⏩</button>
-
-<div></div>
-
-  <!-- INPUT -->
-  <input 
-  id="display" 
-  type="number" 
-  placeholder=""
-  style="
-    grid-column: span 5;
-    height:50px;
-    border:none;
-    border-radius:12px;
-    padding:10px;
-    font-size:20px;
-    text-align:center;
-    background:#111;
-  "
->
-
-  <!-- KEYS -->
-  <button class="ctrl-btn" onclick="pressKey(1)">1</button>
-  <button class="ctrl-btn" onclick="pressKey(2)">2</button>
-  <button class="ctrl-btn" onclick="pressKey(3)">3</button>
-
-  <button class="ctrl-btn" onclick="pressKey(4)">4</button>
-  <button class="ctrl-btn" onclick="pressKey(5)">5</button>
-  
-  <button class="ctrl-btn" onclick="clearInput()">C</button>
-  <button class="ctrl-btn" onclick="pressKey(0)">0</button>
-  <button class="ctrl-btn" onclick="submitLesson()">OK</button>
-
-  <button class="ctrl-btn" onclick="refreshLessons()" 
-  style="grid-column: span 3; width:100%; border-radius:15px;">
-    ↻ REFRESH
-  </button>
-
+    <button class="ctrl-btn" id="prev">⏮</button>
+    <button class="ctrl-btn" id="rew">⏪</button>
+    <button class="ctrl-btn" id="playPause">⏯</button>
+    <button class="ctrl-btn" id="next">⏭</button>
+    <button class="ctrl-btn" id="ff">⏩</button>
+  </div>
 </div>
 
 <div id="updateBox" style="
@@ -534,46 +488,16 @@ function goFullScreen(){
 document.body.addEventListener("click", goFullScreen, {once:true});
 
 const guideSteps = [
-
-  { text: "PLATFORM. GUIDE." },
-
-  { text: "Videos play automatically. Tap once for sound." },
-
-  { text: "⬆️ Swipe UP to show the smart menu." },
-
-  { text: "⬇️ Swipe DOWN to hide menus and panels." },
-
-  { text: "Tap the smart button to open system tools." },
-
-  { text: "SYSTEM KEYPAD opens lesson controls." },
-
-  { text: "Use keys 1–5 then press OK to open lessons." },
-
-  { text: "REFRESH restores the main playlist." },
-
-  { text: "⏮ ⏪ ⏯ ⏭ ⏩ Control videos anytime." },
-
-  { text: "TWENDE ZETU DARASANI opens deep health learning." },
-
-  { text: "Select a topic to study health in depth." },
-
-  { text: "☰ SHOW / HIDE manages topic visibility." },
-
-  { text: "Tap lesson text or images to mark them." },
-
-  { text: "PRINT exports marked lesson sections only." },
-
-  { text: "⏯ PLAY/PAUSE controls lesson scrolling." },
-
-  { text: "ROTATE switches portrait and landscape view." },
-
-  { text: "EXIT returns to the AFYA CARE home screen." },
-
-  { text: "⚙️ Settings reopens this guide anytime." },
-  
-  { text: "THAT'S IT. ENJOY THE JOURNEY." }
-  
-
+  {text: "This is the video area. Tap to unmute and play videos."},
+  {text: "Swipe down to hide panels, swipe up to reveal the smart toggle."},
+  {text: "Press '🖱️Controls' to play/pause, rewind, or fast forward videos."},
+  {text: "Press '⌨️Keyboard' to enter a lesson number."},
+  {text: "Press '📚 Health' to explore health lessons."},
+  {text: "Inside a lesson, click any line or image to mark it for printing."},
+  {text: "Press the '🖨 PRINT' button to print only the marked parts."},
+  {text: "Press the '🔃 ROTATE' button to manage landscape/portrait."},
+{text: "Swipe up/down or use the top buttons to hide/show topics."},
+  {text: "That's it! Enjoy The Journey."}
 ];
 
 let guideIndex = 0;
@@ -642,34 +566,6 @@ function startLessonAds(lessonId){
 let playlist=[].concat(...Object.values(lessons));
 let index=0;
 
-const floatingDownloadBtn = document.getElementById("floatingDownloadBtn");
-
-floatingDownloadBtn.onclick = async () => {
-
-  try {
-
-    const currentVideo = playlist[index];
-
-    const cache = await caches.open("afya-downloads");
-
-    await cache.add(currentVideo);
-
-    floatingDownloadBtn.innerText = "✅ DOWNLOADED";
-
-    setTimeout(()=>{
-      floatingDownloadBtn.innerText = "⬇ DOWNLOAD";
-    },2000);
-
-  } catch(err){
-
-    alert("Download failed");
-
-    console.log(err);
-
-  }
-
-};
-
 function playVideo(i){ if(i>=playlist.length) i=0; if(i<0) i=playlist.length-1; index=i; video.src=playlist[index]; video.play().catch(()=>{}); }
 playVideo(0);
 video.addEventListener("ended", () => {
@@ -703,58 +599,9 @@ if ("serviceWorker" in navigator) {
     .catch(err => console.log("SW error", err));
 }
 
-checkLicense();
-
 /* SMART SYSTEM */
 const smartToggle=document.getElementById("smartToggle");
 const smartPanel=document.getElementById("smartPanel");
-
-/* ================= LEARNING CORE ROTATION ================= */
-
-const healthMain = document.getElementById("healthMain");
-
-const healthHints = [
-  "LEARN DISEASES",
-  "SYMPTOMS GUIDE",
-  "TREATMENT METHODS",
-  "PREVENTION TIPS",
-];
-
-let healthIndex = 0;
-
-// STYLE EFFECT
-healthMain.style.transition = "all 0.5s ease";
-healthMain.style.display = "block";
-
-function rotateHealthHints(){
-
-  if(!healthMain) return;
-
-  // FADE OUT
-  healthMain.style.opacity = "0";
-  healthMain.style.transform = "translateY(10px)";
-
-  setTimeout(()=>{
-
-    // CHANGE TEXT
-    healthMain.innerText = healthHints[healthIndex];
-
-    // FADE IN
-    healthMain.style.opacity = "1";
-    healthMain.style.transform = "translateY(0)";
-
-    healthIndex++;
-
-    if(healthIndex >= healthHints.length){
-      healthIndex = 0;
-    }
-
-  }, 400);
-}
-
-rotateHealthHints();
-
-setInterval(rotateHealthHints, 2200);
 
 let panelTimer=null;
 
@@ -786,6 +633,7 @@ smartPanel.addEventListener("click",resetTimer);
 
 /* ================= CONTROLS ================= */
 const openControls=document.getElementById("openControls");
+const openKeypad=document.getElementById("openKeypad");
 const openHealth=document.getElementById("openHealth");
 
 const controls=document.getElementById("controls");
@@ -803,8 +651,6 @@ ff.onclick=()=>video.currentTime+=10;
 playPause.onclick=()=>video.paused?video.play():video.pause();
 
 let currentVersion = localStorage.getItem("app_version") || "1.0.0";
-
-let licenseData = null;
 
 async function checkForUpdate() {
   try {
@@ -849,113 +695,11 @@ function applyUpdate() {
   location.reload();
 }
 
-async function checkLicense(){
-
-  try{
-
-    const res = await fetch("license.json?time=" + Date.now());
-    const data = await res.json();
-
-    licenseData = data;
-
-    console.log("LICENSE:", data);
-
-    // // ❌ BLOCK if invalid
-if(!data.active){
-
-  document.body.innerHTML = `
-  
-    <div style="
-      position:fixed;
-      inset:0;
-      background:black;
-      color:#00ffff;
-      display:flex;
-      flex-direction:column;
-      justify-content:center;
-      align-items:center;
-      text-align:center;
-      padding:20px;
-      font-family:'Russo One', Arial;
-    ">
-
-      <div style="
-        font-size:34px;
-        margin-bottom:15px;
-        letter-spacing:2px;
-      ">
-        ${data.smartLockedTitle || "AFYA CARE PROTECTED MODE"}
-      </div>
-
-      <div style="
-        font-size:20px;
-        opacity:0.9;
-        max-width:600px;
-        line-height:1.7;
-      ">
-        ${data.smartLockedWord || "Your session is secured by DEKA Health System"}
-      </div>
-
-      <div style="
-        margin-top:25px;
-        font-size:14px;
-        opacity:0.6;
-      ">
-        ${data.smartLockedFooter || "Please activate to continue learning"}
-      </div>
-
-    </div>
-
-  `;
-
-  return;
-}
-
-  }catch(err){
-
-    console.log("License check failed");
-
-    document.body.innerHTML = `
-      <div style="
-        position:fixed;
-        inset:0;
-        background:black;
-        color:red;
-        display:flex;
-        justify-content:center;
-        align-items:center;
-        font-size:20px;
-        text-align:center;
-        padding:20px;
-      ">
-        ⚠️ Cannot verify license
-      </div>
-    `;
-  }
-}
-
 /* ================= KEYPAD ================= */
 const display=document.getElementById("display");
+const keypad=document.getElementById("keypad");
 
-let hintIndex = 0;
-function rotateLessonHints(){
-
-  // Stop hints while user is typing
-  if(display.value !== "") return;
-
-  display.placeholder = lessonHints[hintIndex];
-
-  hintIndex++;
-
-  if(hintIndex >= lessonHints.length){
-    hintIndex = 0;
-  }
-}
-
-rotateLessonHints();
-
-setInterval(rotateLessonHints, 2000);
-
+openKeypad.onclick=()=>{keypad.style.display=keypad.style.display==="none"?"block":"none"; setTimeout(()=>display.focus(),200);};
 function pressKey(n){ display.value+=n; }
 function clearInput(){ display.value=""; }
 function submitLesson(){
@@ -963,12 +707,12 @@ function submitLesson(){
   if(lessons[v]){
     currentLesson=v; playlist=lessons[v]; index=0; playVideo(0); stopAds(); startLessonAds(v);
   }
-  display.value="";
+  display.value=""; keypad.style.display="none";
 }
 function refreshLessons(){
   currentLesson=null; playlist=[].concat(...Object.values(lessons)); index=0; playVideo(0);
   stopLessonAds(); stopAds(); adIndex=0; resetAdImage(); setTimeout(()=>startAds(),200);
-  display.value="";
+  display.value=""; keypad.style.display="none";
 }
 startAds();
 display.addEventListener("keypress",e=>{if(e.key==="Enter") submitLesson();});
@@ -1229,6 +973,7 @@ document.addEventListener("touchend",(e)=>{
     smartToggle.style.opacity="0";
     smartToggle.style.transform="translateY(100px)";
     controls.classList.remove("show");
+    keypad.style.display="none";
   }
 });
 
