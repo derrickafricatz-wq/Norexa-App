@@ -378,6 +378,27 @@ Install App
 
 <video id="brandVideo" autoplay muted playsinline></video>
 
+<button id="downloadBtn" style="
+position:fixed;
+right:20px;
+bottom:90px;
+z-index:999;
+
+padding:14px 18px;
+border:none;
+border-radius:14px;
+
+background:#00ffff;
+color:black;
+
+font-weight:bold;
+font-size:16px;
+
+box-shadow:0 0 15px rgba(0,255,255,0.5);
+">
+⬇ DOWNLOAD
+</button>
+
 <div id="clockBox"></div>
 <button id="settingsBtn" style="
   position:fixed;
@@ -566,11 +587,53 @@ function startLessonAds(lessonId){
 let playlist=[].concat(...Object.values(lessons));
 let index=0;
 
+const downloadBtn = document.getElementById("downloadBtn");
+
 function playVideo(i){ if(i>=playlist.length) i=0; if(i<0) i=playlist.length-1; index=i; video.src=playlist[index]; video.play().catch(()=>{}); }
 playVideo(0);
 video.addEventListener("ended", () => {
   playVideo(index + 1);
 });
+
+downloadBtn.onclick = async () => {
+
+  try {
+
+    const currentVideo = playlist[index];
+
+    const response = await fetch(currentVideo);
+
+    const blob = await response.blob();
+
+    const a = document.createElement("a");
+
+    a.href = URL.createObjectURL(blob);
+
+    a.download = "afya-video.mp4";
+
+    document.body.appendChild(a);
+
+    a.click();
+
+    a.remove();
+
+    downloadBtn.innerText = "✅ DOWNLOADED";
+
+    setTimeout(() => {
+
+      downloadBtn.innerText = "⬇ DOWNLOAD";
+
+    }, 2000);
+
+  } catch(err){
+
+    alert("Download failed");
+
+    console.log(err);
+
+  }
+
+};
 
 /* INSTALL APP */
 let deferredPrompt;
