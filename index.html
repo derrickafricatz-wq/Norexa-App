@@ -437,6 +437,7 @@ box-shadow:0 0 15px rgba(0,255,255,0.5);
   <button class="smart-item" id="openControls">🖱️ Controls</button>
   <button class="smart-item" id="openKeypad">⌨️ Keyboard</button>
   <button class="smart-item" id="openHealth">📚 Health</button>
+  <button class="smart-item" id="openDownloads">📥 Offline Videos</button>
 </div>
 
 <div id="keypad">
@@ -595,29 +596,44 @@ video.addEventListener("ended", () => {
   playVideo(index + 1);
 });
 
-downloadBtn.onclick = () => {
+downloadBtn.onclick = async () => {
 
-  const currentVideo = playlist[index];
+  try {
 
-  const a = document.createElement("a");
+    const currentVideo = playlist[index];
 
-  a.href = currentVideo;
+    const response = await fetch(currentVideo);
+    const blob = await response.blob();
 
-  a.download = "afya-video.mp4";
+    const reader = new FileReader();
 
-  document.body.appendChild(a);
+    reader.onloadend = () => {
 
-  a.click();
+      let saved = JSON.parse(localStorage.getItem("offlineVideos") || "[]");
 
-  a.remove();
+      saved.push({
+        data: reader.result,
+        name: "Afya Video " + (saved.length + 1)
+      });
 
-  downloadBtn.innerText = "✅ DOWNLOADED";
+      localStorage.setItem("offlineVideos", JSON.stringify(saved));
 
-  setTimeout(() => {
+      downloadBtn.innerText = "✅ SAVED OFFLINE";
 
-    downloadBtn.innerText = "⬇ DOWNLOAD";
+      setTimeout(() => {
+        downloadBtn.innerText = "⬇ DOWNLOAD";
+      }, 2000);
 
-  }, 2000);
+    };
+
+    reader.readAsDataURL(blob);
+
+  } catch (err) {
+
+    alert("Offline save failed");
+    console.log(err);
+
+  }
 
 };
 
@@ -684,6 +700,7 @@ smartPanel.addEventListener("click",resetTimer);
 const openControls=document.getElementById("openControls");
 const openKeypad=document.getElementById("openKeypad");
 const openHealth=document.getElementById("openHealth");
+const openDownloads=document.getElementById("openDownloads");
 
 const controls=document.getElementById("controls");
 const prev=document.getElementById("prev");
@@ -775,6 +792,79 @@ window._inner=null, window._outer=null, window._lesson=null, window._topics=null
 let topicsExpanded = true;
 
 openHealth.onclick=showHealthyClass;
+
+openDownloads.onclick = showOfflineVideos;
+
+function showOfflineVideos(){
+
+  const saved = JSON.parse(localStorage.getItem("offlineVideos") || "[]");
+
+  if(saved.length === 0){
+    alert("No offline videos yet");
+    return;
+  }
+
+  const menu = document.createElement("div");
+
+  menu.style.position = "fixed";
+  menu.style.inset = "0";
+  menu.style.background = "black";
+  menu.style.zIndex = "9999";
+  menu.style.overflow = "auto";
+  menu.style.padding = "20px";
+  menu.style.color = "#00ffff";
+
+  const title = document.createElement("h2");
+  title.innerText = "📥 Offline Videos";
+  menu.appendChild(title);
+
+  const close = document.createElement("button");
+  close.innerText = "✖ CLOSE";
+  close.style.padding = "12px";
+  close.style.marginBottom = "20px";
+
+  close.onclick = () => menu.remove();
+
+  menu.appendChild(close);
+
+  saved.forEach((video, i) => {
+
+    const btn = document.createElement("button");
+
+    btn.innerText = video.name || ("Offline Video " + (i + 1));
+
+    btn.style.display = "block";
+    btn.style.marginTop = "15px";
+    btn.style.padding = "15px";
+    btn.style.width = "100%";
+    btn.style.background = "#00ffff";
+    btn.style.color = "black";
+    btn.style.border = "none";
+    btn.style.borderRadius = "10px";
+
+    btn.onclick = () => {
+
+      video.src = video.data;
+
+      videoElementFix(video.data);
+
+      menu.remove();
+
+    };
+
+    menu.appendChild(btn);
+
+  });
+
+  document.body.appendChild(menu);
+}
+
+/* FIX PLAYER SWITCH */
+function videoElementFix(src){
+  const vid = document.getElementById("brandVideo");
+  vid.src = src;
+  vid.play().catch(()=>{});
+}
 
 function showHealthyClass(){
   if(document.getElementById("healthyContainer")) return;
