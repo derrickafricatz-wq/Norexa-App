@@ -595,43 +595,29 @@ video.addEventListener("ended", () => {
   playVideo(index + 1);
 });
 
-downloadBtn.onclick = async () => {
+downloadBtn.onclick = () => {
 
-  try {
+  const currentVideo = playlist[index];
 
-    const currentVideo = playlist[index];
+  const a = document.createElement("a");
 
-    const response = await fetch(currentVideo);
+  a.href = currentVideo;
 
-    const blob = await response.blob();
+  a.download = "afya-video.mp4";
 
-    const a = document.createElement("a");
+  document.body.appendChild(a);
 
-    a.href = URL.createObjectURL(blob);
+  a.click();
 
-    a.download = "afya-video.mp4";
+  a.remove();
 
-    document.body.appendChild(a);
+  downloadBtn.innerText = "✅ DOWNLOADED";
 
-    a.click();
+  setTimeout(() => {
 
-    a.remove();
+    downloadBtn.innerText = "⬇ DOWNLOAD";
 
-    downloadBtn.innerText = "✅ DOWNLOADED";
-
-    setTimeout(() => {
-
-      downloadBtn.innerText = "⬇ DOWNLOAD";
-
-    }, 2000);
-
-  } catch(err){
-
-    alert("Download failed");
-
-    console.log(err);
-
-  }
+  }, 2000);
 
 };
 
