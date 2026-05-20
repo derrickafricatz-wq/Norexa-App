@@ -1,4 +1,4 @@
-const CACHE_NAME = "afya-care-v7";
+const CACHE_NAME = "afya-care-v8";
 
 const APP_FILES = [
   "/AFYA-CARE/",
