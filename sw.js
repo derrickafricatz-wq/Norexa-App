@@ -1,10 +1,14 @@
-const CACHE_NAME = "afya-care-v8";
+const CACHE_NAME = "afya-care-v9";
 
 const APP_FILES = [
   "/AFYA-CARE/",
   "/AFYA-CARE/index.html",
   "/AFYA-CARE/images/ad3.png",
-  "/AFYA-CARE/images/one.jpg"
+  "/AFYA-CARE/images/one.jpg",
+  "/AFYA-CARE/videos/choo.mp4",
+  "/AFYA-CARE/videos/usafi.mp4",
+  "/AFYA-CARE/videos/chanjo.mp4",
+  "/AFYA-CARE/videos/meno.mp4"
 ];
 
 self.addEventListener("install", (event) => {
