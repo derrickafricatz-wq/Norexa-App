@@ -169,6 +169,22 @@ html, body {
   to { transform: translateX(-100%); }
 }
 
+.spinner {
+  width: 14px;
+  height: 14px;
+  margin-left: 8px;
+  border: 2px solid #000;
+  border-top: 2px solid transparent;
+  border-radius: 50%;
+  display: inline-block;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 /* LESSON LABEL */
 #lessonLabel {
   position: fixed;
@@ -597,21 +613,24 @@ video.addEventListener("ended", () => {
 });
 
 downloadBtn.onclick = async () => {
-
-  // 🔥 STEP 1: instant feedback (fix “not responding” feeling)
+  // 🔥 STEP 1: LOCK BUTTON + SHOW LOADING STATE
   downloadBtn.disabled = true;
-  downloadBtn.innerText = "⏳ DOWNLOADING...";
+  downloadBtn.innerHTML = `⏳ Downloading <span class="spinner"></span>`;
 
   try {
-
     const currentVideo = playlist[index];
+
+    if (!currentVideo) throw new Error("No video found");
+
     const response = await fetch(currentVideo);
+
+    if (!response.ok) throw new Error("Network error");
+
     const blob = await response.blob();
 
     const reader = new FileReader();
 
     reader.onloadend = () => {
-
       let saved = JSON.parse(localStorage.getItem("offlineVideos") || "[]");
 
       saved.push({
@@ -621,30 +640,26 @@ downloadBtn.onclick = async () => {
 
       localStorage.setItem("offlineVideos", JSON.stringify(saved));
 
-      // ✅ SUCCESS FEEDBACK
-      downloadBtn.innerText = "✅ SAVED OFFLINE";
+      // ✅ SUCCESS STATE
+      downloadBtn.innerHTML = "✅ Saved Offline";
 
       setTimeout(() => {
-        downloadBtn.innerText = "⬇ DOWNLOAD";
-        downloadBtn.disabled = false; // 🔥 unlock button after success
+        downloadBtn.disabled = false;
+        downloadBtn.innerHTML = "⬇ DOWNLOAD";
       }, 2000);
-
     };
 
     reader.readAsDataURL(blob);
 
   } catch (err) {
-
     console.log(err);
 
     // ❌ ERROR RESET (VERY IMPORTANT)
     downloadBtn.disabled = false;
-    downloadBtn.innerText = "⬇ DOWNLOAD";
+    downloadBtn.innerHTML = "⬇ DOWNLOAD";
 
-    alert("Offline save failed");
-
+    alert("Download failed. Try again.");
   }
-
 };
 
 /* INSTALL APP */
