@@ -606,6 +606,15 @@ let index=0;
 
 const downloadBtn = document.getElementById("downloadBtn");
 
+function fetchWithTimeout(url, timeout = 15000) {
+  return Promise.race([
+    fetch(url),
+    new Promise((_, reject) =>
+      setTimeout(() => reject(new Error("Timeout")), timeout)
+    )
+  ]);
+}
+
 function playVideo(i){ if(i>=playlist.length) i=0; if(i<0) i=playlist.length-1; index=i; video.src=playlist[index]; video.play().catch(()=>{}); }
 playVideo(0);
 video.addEventListener("ended", () => {
@@ -613,20 +622,24 @@ video.addEventListener("ended", () => {
 });
 
 downloadBtn.onclick = async () => {
-  // 🔥 STEP 1: LOCK BUTTON + SHOW LOADING STATE
   downloadBtn.disabled = true;
   downloadBtn.innerHTML = `⏳ Downloading <span class="spinner"></span>`;
+
+  let timeoutFix;
 
   try {
     const currentVideo = playlist[index];
 
     if (!currentVideo) throw new Error("No video found");
 
-    const response = await fetch(currentVideo);
+    // 🔥 SAFE FETCH (WITH TIMEOUT)
+    const response = await fetch(currentVideo, { cache: "force-cache" });
 
-    if (!response.ok) throw new Error("Network error");
+if (!response.ok) {
+  throw new Error("Video not accessible");
+}
 
-    const blob = await response.blob();
+const blob = await response.blob();
 
     const reader = new FileReader();
 
@@ -640,10 +653,9 @@ downloadBtn.onclick = async () => {
 
       localStorage.setItem("offlineVideos", JSON.stringify(saved));
 
-      // ✅ SUCCESS STATE
       downloadBtn.innerHTML = "✅ Saved Offline";
 
-      setTimeout(() => {
+      timeoutFix = setTimeout(() => {
         downloadBtn.disabled = false;
         downloadBtn.innerHTML = "⬇ DOWNLOAD";
       }, 2000);
@@ -652,13 +664,13 @@ downloadBtn.onclick = async () => {
     reader.readAsDataURL(blob);
 
   } catch (err) {
-    console.log(err);
+    console.log("DOWNLOAD ERROR:", err);
 
-    // ❌ ERROR RESET (VERY IMPORTANT)
+    // ❌ STOP STUCK STATE
     downloadBtn.disabled = false;
     downloadBtn.innerHTML = "⬇ DOWNLOAD";
 
-    alert("Download failed. Try again.");
+    alert("Download failed or timed out. Check network or video link.");
   }
 };
 
