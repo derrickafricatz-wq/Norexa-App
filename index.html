@@ -598,10 +598,13 @@ video.addEventListener("ended", () => {
 
 downloadBtn.onclick = async () => {
 
+  // 🔥 STEP 1: instant feedback (fix “not responding” feeling)
+  downloadBtn.disabled = true;
+  downloadBtn.innerText = "⏳ DOWNLOADING...";
+
   try {
 
     const currentVideo = playlist[index];
-
     const response = await fetch(currentVideo);
     const blob = await response.blob();
 
@@ -618,10 +621,12 @@ downloadBtn.onclick = async () => {
 
       localStorage.setItem("offlineVideos", JSON.stringify(saved));
 
+      // ✅ SUCCESS FEEDBACK
       downloadBtn.innerText = "✅ SAVED OFFLINE";
 
       setTimeout(() => {
         downloadBtn.innerText = "⬇ DOWNLOAD";
+        downloadBtn.disabled = false; // 🔥 unlock button after success
       }, 2000);
 
     };
@@ -630,8 +635,13 @@ downloadBtn.onclick = async () => {
 
   } catch (err) {
 
-    alert("Offline save failed");
     console.log(err);
+
+    // ❌ ERROR RESET (VERY IMPORTANT)
+    downloadBtn.disabled = false;
+    downloadBtn.innerText = "⬇ DOWNLOAD";
+
+    alert("Offline save failed");
 
   }
 
